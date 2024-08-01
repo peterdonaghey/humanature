@@ -1,48 +1,45 @@
-import type { MetaFunction } from "@remix-run/node";
+import type {MetaFunction} from "@remix-run/node";
+import {useState} from "react";
 
 export const meta: MetaFunction = () => {
   return [
-    { title: "New Remix App" },
-    { name: "description", content: "Welcome to Remix!" },
+    {title: "Humanature"},
+    {name: "description", content: "This is a website"},
   ];
 };
 
 export default function Index() {
+  const [buttonText, setButtonText] = useState(
+    "Click here and maybe something will happen"
+  );
+
+  const handleClick = () => {
+    setButtonText("loading...");
+    setTimeout(() => {
+      setButtonText("nothing is happening sorry");
+    }, 3000);
+    setTimeout(() => {
+      setButtonText("Click here and maybe something will happen");
+    }, 7000);
+  };
   return (
-    <div className="font-sans p-4">
-      <h1 className="text-3xl">Welcome to Remix</h1>
-      <ul className="list-disc mt-4 pl-6 space-y-2">
-        <li>
-          <a
-            className="text-blue-700 underline visited:text-purple-900"
-            target="_blank"
-            href="https://remix.run/start/quickstart"
-            rel="noreferrer"
-          >
-            5m Quick Start
-          </a>
-        </li>
-        <li>
-          <a
-            className="text-blue-700 underline visited:text-purple-900"
-            target="_blank"
-            href="https://remix.run/start/tutorial"
-            rel="noreferrer"
-          >
-            30m Tutorial
-          </a>
-        </li>
-        <li>
-          <a
-            className="text-blue-700 underline visited:text-purple-900"
-            target="_blank"
-            href="https://remix.run/docs"
-            rel="noreferrer"
-          >
-            Remix Docs
-          </a>
-        </li>
-      </ul>
-    </div>
+    <main className="font-sans p-16 flex flex-col items-center justify-center bg-teal-300 h-screen">
+      <div className="flex flex-col items-center justify-center  bg-indigo-300 w-full h-full p-16">
+        <div className="flex flex-col items-center justify-center  bg-yellow-300 w-full h-full p-16">
+          <div className="flex flex-col items-center justify-center  bg-red-300 w-full h-full p-16">
+            <div className="flex flex-col items-center justify-center  bg-lime-300 w-full h-full p-16">
+              <h1 className="text-3xl pb-2">Welcome</h1>
+              <p>This is a website</p>
+              <button
+                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-10"
+                onClick={handleClick}
+              >
+                {buttonText}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
   );
 }
