@@ -1,7 +1,7 @@
 import {Link} from "@remix-run/react";
 
 export const NavBar = () => {
-  const colors = ["lime-500", "sky-500", "amber-500", "indigo-500"];
+  const colors = ["bg-lime-500", "bg-sky-500", "bg-amber-500", "bg-indigo-500"];
   const NavBarButton = ({
     to,
     text,
@@ -11,13 +11,12 @@ export const NavBar = () => {
     text: string;
     index: number;
   }) => {
-    const bgColor = colors[index % colors.length];
-    const hoverColor = colors[(index + 1) % colors.length];
+    const bgColor = colors[index];
 
     return (
       <Link
         to={to}
-        className={`relative group cursor-pointer mt-4  px-4 py-2 bg-${colors[index]} text-white rounded-lg shadow-md opacity-80 hover:opacity-100 transition duration-300 ease-in-out transform hover:-translate-y-1`}
+        className={`relative group cursor-pointer mt-4  px-4 py-2 ${bgColor} text-white rounded-lg shadow-md opacity-80 hover:opacity-100 transition duration-300 ease-in-out transform hover:-translate-y-1`}
       >
         {text}
       </Link>
