@@ -3,7 +3,7 @@ import {NavBar} from "./NavBar";
 export const Layout = ({children}: {children: React.ReactNode}) => {
   return (
     <main className="font-sans flex flex-col items-center h-screen overflow-y-scroll">
-      <div className="relative w-3/4">
+      <div className="relative w-3/4 min-w-[600px]">
         <img
           src="https://humanature.s3.eu-central-1.amazonaws.com/humanature_banner.png"
           alt="Humanature"
