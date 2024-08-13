@@ -11,7 +11,9 @@ export const meta: MetaFunction = () => {
 export default function Index() {
   return (
     <Layout>
-      <div className=" text-center w-full pt-8">This is the home page</div>
+      <div className="text-center w-full pt-8">
+        <h1 className="text-4xl font-bold">Home</h1>
+      </div>
     </Layout>
   );
 }
