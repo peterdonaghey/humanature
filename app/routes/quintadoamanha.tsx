@@ -16,7 +16,9 @@ export default function Index() {
           height="800"
         ></iframe>
         <div id="esh" className="text-left w-fit text-lg mt-10">
-          <h2 className="text-2xl font-semibold mb-4">List of things:</h2>
+          <h2 className="text-2xl font-semibold mb-4">
+            List of things waiting for cake celebration:
+          </h2>
           <ul className="space-y-4 list-none">
             <li className="flex items-start">
               <span className="text-2xl mr-2">🏠</span>
