@@ -15,6 +15,65 @@ export default function Index() {
           width="90%"
           height="800"
         ></iframe>
+        <div id="esh" className="text-left w-fit text-lg mt-10">
+          <h2 className="text-2xl font-semibold mb-4">List of things:</h2>
+          <ul className="space-y-4 list-none">
+            <li className="flex items-start">
+              <span className="text-2xl mr-2">🏠</span>
+              <span>
+                Terrace impermeability, ask Marcos dad or in the village
+              </span>
+            </li>
+            <li className="flex items-start">
+              <span className="text-2xl mr-2">🚽</span>
+              <span>
+                Compost toilet in the Aldeia, Ari and Gili in progress
+              </span>
+            </li>
+            <li className="flex items-start">
+              <span className="text-2xl mr-2">🚿</span>
+              <span>Showers in the Aldeia, concrete poured</span>
+            </li>
+            <li className="flex items-start">
+              <span className="text-2xl mr-2">🪨</span>
+              <span>Compost rock moving with Marissa</span>
+            </li>
+            <li className="flex items-start">
+              <span className="text-2xl mr-2">🌿</span>
+              <span>
+                Brumble battle, prepare your weapons (arms, hands and gloves)
+              </span>
+            </li>
+            <li className="flex items-start">
+              <span className="text-2xl mr-2">🎨</span>
+              <span>Fence painting, almost done</span>
+            </li>
+            <li className="flex items-start">
+              <span className="text-2xl mr-2">🍵</span>
+              <span>
+                Kombucha and Ginger beer preparation (always possible, ask
+                Peter)
+              </span>
+            </li>
+            <li className="flex items-start">
+              <span className="text-2xl mr-2">🥒</span>
+              <div>
+                <span>Pickle Sunday</span>
+              </div>
+            </li>
+            <li className="flex items-start">
+              <span className="text-2xl mr-2">♻️</span>
+              <span>
+                Paper and Plastic home recycling, starting sorting in the
+                storage
+              </span>
+            </li>
+            <li className="flex items-start">
+              <span className="text-2xl mr-2">🔧</span>
+              <span>Garage work station organization, in the calendar</span>
+            </li>
+          </ul>
+        </div>
       </div>
     </Layout>
   );
