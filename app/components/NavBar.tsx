@@ -16,7 +16,7 @@ export const NavBar = () => {
     return (
       <Link
         to={to}
-        className={`relative group cursor-pointer mt-4  px-4 py-2 ${bgColor} text-white rounded-lg shadow-md opacity-80 hover:opacity-100 transition duration-300 ease-in-out transform hover:-translate-y-1`}
+        className={`relative group cursor-pointer mt-4 sm:text-xs whitespace-nowrap px-4 py-2 ${bgColor} text-white rounded-lg shadow-md opacity-80 hover:opacity-100 transition duration-300 ease-in-out transform hover:-translate-y-1`}
       >
         {text}
       </Link>
