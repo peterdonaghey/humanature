@@ -62,7 +62,7 @@ export default function Index() {
             className="text-left w-full md:w-1/2 text-lg"
           >
             <h2 className="text-2xl font-semibold mb-4 text-center">
-              FINISHED PROJECTS
+              FINISHED PROJECTS 🎉 Thanks to all family!! ❤️
             </h2>
             <ul className="space-y-4 list-none">
               <li className="flex items-start">
@@ -71,11 +71,13 @@ export default function Index() {
               </li>
               <li className="flex items-start">
                 <span className="text-2xl mr-2">🚽</span>
-                <span>Compost toilet</span>
+                <span>
+                  Compost toilet in the Aldeia (special thanks Ari and Gili)
+                </span>
               </li>
               <li className="flex items-start">
-                <span className="text-2xl mr-2">🪑</span>
-                <span>Fixing table shadow</span>
+                <span className="text-2xl mr-2">🍽️</span>
+                <span>Fixing shadow over the table (special thanks Kai))</span>
               </li>
               <li className="flex items-start">
                 <span className="text-2xl mr-2">🧹</span>
@@ -83,15 +85,17 @@ export default function Index() {
               </li>
               <li className="flex items-start">
                 <span className="text-2xl mr-2">🌿</span>
-                <span>Bramble battle</span>
+                <span>Bramble battle, big success, one of many... </span>
               </li>
               <li className="flex items-start">
                 <span className="text-2xl mr-2">🎨</span>
-                <span>Fence painting</span>
+                <span>
+                  Fence painting (special thanks Galia and Talia for focalizing)
+                </span>
               </li>
               <li className="flex items-start">
-                <span className="text-2xl mr-2">💻</span>
-                <span>Work station organization (DOWN BELOW)</span>
+                <span className="text-2xl mr-2"> 🛠️</span>
+                <span>Garage work station organization </span>
               </li>
             </ul>
           </div>
