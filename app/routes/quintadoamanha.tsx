@@ -3,7 +3,7 @@ import {Layout} from "../components/Layout";
 export default function Index() {
   return (
     <Layout>
-      <div className="flex flex-col justify-center items-center ">
+      <div className="flex flex-col justify-center items-center">
         <div className="text-center w-full pt-8">
           <h1 className="text-4xl font-bold">Quinta do Amanhã</h1>
           <p className="text-lg">Calendar</p>
@@ -15,17 +15,16 @@ export default function Index() {
           width="90%"
           height="800"
         ></iframe>
-        <div className="flex flex-col md:flex-row justify-center items-start space-x-8 w-full mt-10">
-          <div id="esh" className="text-left w-full md:w-1/2 text-lg">
+        <div className="flex flex-col md:flex-row justify-center items-start space-x-8 w-full mt-10 ">
+          <div id="esh" className="text-left w-full md:w-1/2 text-lg mx-8">
             <h2 className="text-2xl font-semibold mb-4 text-center">
-              List of things waiting for cake celebration:
+              List of things waiting for cake celebration 🍰 :
             </h2>
             <ul className="space-y-4 list-none">
               <li className="flex items-start">
                 <span className="text-2xl mr-2">🏠</span>
                 <span>Terrace impermeability, before RAIN on Saturday</span>
               </li>
-
               <li className="flex items-start">
                 <span className="text-2xl mr-2">🚿</span>
                 <span>Shower in the Aldeia, concrete poured twice!</span>
@@ -34,7 +33,6 @@ export default function Index() {
                 <span className="text-2xl mr-2">🪨</span>
                 <span>Compost rock moving with Marissa, ongoing</span>
               </li>
-
               <li className="flex items-start">
                 <span className="text-2xl mr-2">🍵</span>
                 <span>
@@ -67,17 +65,13 @@ export default function Index() {
             <ul className="space-y-4 list-none">
               <li className="flex items-start">
                 <span className="text-2xl mr-2">🚀</span>
-                <span>Futura space organization</span>
+                <span>FUTURA space organization + party initiation</span>
               </li>
               <li className="flex items-start">
                 <span className="text-2xl mr-2">🚽</span>
                 <span>
-                  Compost toilet in the Aldeia (special thanks Ari and Gili)
+                  Compost toilet in the ALDEIA (special thanks Ari and Gili)
                 </span>
-              </li>
-              <li className="flex items-start">
-                <span className="text-2xl mr-2">🍽️</span>
-                <span>Fixing shadow over the table (special thanks Kai))</span>
               </li>
               <li className="flex items-start">
                 <span className="text-2xl mr-2">🧹</span>
@@ -94,8 +88,72 @@ export default function Index() {
                 </span>
               </li>
               <li className="flex items-start">
-                <span className="text-2xl mr-2"> 🛠️</span>
-                <span>Garage work station organization </span>
+                <span className="text-2xl mr-2">🛠️</span>
+                <span>Garage DOWN BELOW cleaning and organization</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div className="flex flex-col md:flex-row justify-center items-start space-x-8 w-full mt-10 mx-10">
+          <div
+            id="ongoing-projects"
+            className="text-left w-full md:w-1/2 text-lg mx-8"
+          >
+            <h2 className="text-2xl font-semibold mb-4 text-center">
+              ONGOING PROJECTS 🔄
+            </h2>
+            <ul className="space-y-4 list-none">
+              <li className="flex items-start">
+                <span className="text-2xl mr-2">🤝</span>
+                <span>
+                  Community building (meetings, movie nights, jams sessions,
+                  Shuk dates, river swims)
+                </span>
+              </li>
+              <li className="flex items-start">
+                <span className="text-2xl mr-2">☕</span>
+                <span>
+                  Space holding and organic Chai shop in festivals for
+                  fundraising
+                </span>
+              </li>
+              <li className="flex items-start">
+                <span className="text-2xl mr-2">🧪</span>
+                <span>
+                  Fermenteria (Kombucha, Ginger beer, Tempeh, pickles)
+                </span>
+              </li>
+              <li className="flex items-start">
+                <span className="text-2xl mr-2">🏡</span>
+                <span>
+                  Composting and compost recollection for soil regeneration
+                </span>
+              </li>
+              <li className="flex items-start">
+                <span className="text-2xl mr-2">♻️</span>
+                <span>Dumpster diving and re~evaluation of Trash</span>
+              </li>
+            </ul>
+          </div>
+          <div
+            id="fall-winter-projects"
+            className="text-left w-full md:w-1/2 text-lg"
+          >
+            <h2 className="text-2xl font-semibold mb-4 text-center">
+              FALL/WINTER PROJECTS 🍂❄️
+            </h2>
+            <ul className="space-y-4 list-none">
+              <li className="flex items-start">
+                <span className="text-2xl mr-2">🏠</span>
+                <span>FUTURA home made recycled insolation</span>
+              </li>
+              <li className="flex items-start">
+                <span className="text-2xl mr-2">🌱</span>
+                <span>TERRACE greenhouse</span>
+              </li>
+              <li className="flex items-start">
+                <span className="text-2xl mr-2">🍄</span>
+                <span>Fungi propagation</span>
               </li>
             </ul>
           </div>
