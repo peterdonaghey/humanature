@@ -131,7 +131,7 @@ export default function Index() {
               </li>
               <li className="flex items-start">
                 <span className="text-2xl mr-2">♻️</span>
-                <span>Dumpster diving and re~evaluation of Trash</span>
+                <span>Dumpster diving and revaluation of Trash</span>
               </li>
             </ul>
           </div>
