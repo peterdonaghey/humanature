@@ -1,4 +1,4 @@
-import type {MetaFunction} from "@remix-run/node";
+import {redirect, type MetaFunction} from "@remix-run/node";
 import {Layout} from "../components/Layout";
 
 export const meta: MetaFunction = () => {
@@ -6,6 +6,10 @@ export const meta: MetaFunction = () => {
     {title: "Humanature"},
     {name: "description", content: "This is a website"},
   ];
+};
+
+export const loader = async () => {
+  return redirect("/compost");
 };
 
 export default function Index() {

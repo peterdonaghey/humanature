@@ -24,7 +24,7 @@ export const NavBar = () => {
   };
 
   const navigationOptions = [
-    {to: "/", text: "home"},
+    // {to: "/", text: "home"},
     {to: "/compost", text: "compost"},
     {to: "/quintadoamanha", text: "quinta do amanhã"},
   ];
