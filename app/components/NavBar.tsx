@@ -16,7 +16,7 @@ export const NavBar = () => {
     return (
       <Link
         to={to}
-        className={`relative group cursor-pointer mt-4  whitespace-nowrap px-4 py-2 ${bgColor} text-white rounded-lg shadow-md opacity-80 hover:opacity-100 transition duration-300 ease-in-out transform hover:-translate-y-1`}
+        className={`relative group cursor-pointer h-fit mt-4 select-none whitespace-nowrap px-4 py-2 ${bgColor} text-white rounded-lg shadow-md opacity-80 hover:opacity-100 transition duration-300 ease-in-out transform hover:-translate-y-1`}
       >
         {text}
       </Link>
@@ -26,12 +26,11 @@ export const NavBar = () => {
   const navigationOptions = [
     {to: "/", text: "home"},
     {to: "/compost", text: "compost"},
-    {to: "/fermentaria", text: "fermentaria"},
     {to: "/quintadoamanha", text: "quinta do amanhã"},
   ];
 
   return (
-    <nav className="flex justify-center space-x-4">
+    <nav className="flex justify-center space-x-4 align-middle">
       {navigationOptions.map((option, i) => (
         <NavBarButton
           key={option.to}
