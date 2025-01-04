@@ -1,5 +1,6 @@
 import {Link} from "@remix-run/react";
 import {useLanguage} from "../contexts/LanguageContext";
+import {navigationOptionGroups} from "./NavBar";
 
 export const Footer = () => {
   const {language} = useLanguage();
@@ -10,40 +11,15 @@ export const Footer = () => {
       icon: "🎥",
       url: "https://www.youtube.com/@quintadoamanha",
     },
-    // {
-    //   name: "Instagram",
-    //   icon: "📸",
-    //   url: "https://instagram.com/humanature",
-    // },
+    {
+      name: "Instagram - Quinta do Amanhã",
+      icon: "📸",
+      url: "https://www.instagram.com/quinta.do.amanha/",
+    },
     {
       name: "Facebook - HumaNature",
       icon: "👥",
       url: "https://www.facebook.com/HumaNatureOfficial",
-    },
-  ];
-
-  const navigationOptionGroups = [
-    {
-      to: "/compost-service-fundao",
-      ptText: "compostagem",
-      enText: "compost",
-      children: [
-        {
-          to: "/why-compost",
-          ptText: "Porquê compostar?",
-          enText: "Why compost?",
-        },
-        {
-          to: "/compost-service-fundao",
-          ptText: "Serviço de compostagem fundão",
-          enText: "Compost service fundão",
-        },
-      ],
-    },
-    {
-      to: "/quintadoamanha",
-      ptText: "quinta do amanhã",
-      enText: "quinta do amanhã",
     },
   ];
 

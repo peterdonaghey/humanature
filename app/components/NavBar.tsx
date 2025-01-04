@@ -1,6 +1,38 @@
 import {Link} from "@remix-run/react";
 import {useLanguage} from "../contexts/LanguageContext";
 
+export type NavigationOption = {
+  to: string;
+  ptText: string;
+  enText: string;
+  children?: NavigationOption[];
+};
+
+export const navigationOptionGroups: NavigationOption[] = [
+  {
+    to: "/compost-service-fundao",
+    ptText: "compostagem",
+    enText: "compost",
+    children: [
+      {
+        to: "/why-compost",
+        ptText: "porquê compostar?",
+        enText: "why compost?",
+      },
+      {
+        to: "/compost-service-fundao",
+        ptText: "serviço de compostagem fundão",
+        enText: "compost service fundão",
+      },
+    ],
+  },
+  {
+    to: "/quintadoamanha",
+    ptText: "quinta do amanhã",
+    enText: "quinta do amanhã",
+  },
+];
+
 export const NavBar = () => {
   const {language} = useLanguage();
   const colors = [
@@ -56,38 +88,6 @@ export const NavBar = () => {
       </div>
     );
   };
-
-  type NavigationOption = {
-    to: string;
-    ptText: string;
-    enText: string;
-    children?: NavigationOption[];
-  };
-
-  const navigationOptionGroups: NavigationOption[] = [
-    {
-      to: "/compost-service-fundao",
-      ptText: "compostagem",
-      enText: "compost",
-      children: [
-        {
-          to: "/why-compost",
-          ptText: "porquê compostar?",
-          enText: "why compost?",
-        },
-        {
-          to: "/compost-service-fundao",
-          ptText: "serviço de compostagem fundão",
-          enText: "compost service fundão",
-        },
-      ],
-    },
-    {
-      to: "/quintadoamanha",
-      ptText: "quinta do amanhã",
-      enText: "quinta do amanhã",
-    },
-  ];
 
   return (
     <nav
