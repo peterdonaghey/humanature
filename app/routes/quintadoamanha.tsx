@@ -3,7 +3,7 @@ import {Layout} from "../components/Layout";
 export default function Index() {
   return (
     <Layout>
-      <div className="flex flex-col justify-center items-center">
+      <div className="flex flex-col justify-center items-center mb-16">
         <div className="text-center items-center w-full pt-8">
           {/* <h1 className="text-4xl font-bold">Quinta do Amanhã</h1> */}
           <img

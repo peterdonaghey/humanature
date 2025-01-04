@@ -1,8 +1,10 @@
 import {Layout} from "../components/Layout";
-import {useState} from "react";
+import {useLanguage} from "../contexts/LanguageContext";
+import {LanguageToggle} from "../components/LanguageToggle";
+import {Outlet} from "@remix-run/react";
 
 export default function Index() {
-  const [language, setLanguage] = useState<"pt" | "en">("pt");
+  const {language} = useLanguage();
 
   const compostableItems = [
     {
@@ -103,14 +105,14 @@ export default function Index() {
 
   const welcomeSection = {
     ptText: {
-      title: "Por Que Compostamos? Fechando o Ciclo",
+      title: "Serviço de Compostagem do Fundão",
       paragraph1:
         "Obrigada por aderir ao serviço de compostagem do Fundão. Um projeto com a missão de criar um mundo mais feliz e saudável. Não poderíamos fazê-lo sem você!",
       paragraph2:
         "O projeto Serviço de Compostagem do Fundão é totalmente gerido por voluntários e estamos gratos pela sua ajuda e compaixão pelo projeto. Por isso, pedimos a sua compreensão para quaisquer melhorias que ainda precisamos fazer.",
     },
     enText: {
-      title: "Why do we compost? Closing the cycle",
+      title: "Compost Service Fundão",
       paragraph1:
         "Thank you for joining the Fundão composting service. A project with the mission to create a happier and healthier world. We couldn't do it without you!",
       paragraph2:
@@ -186,14 +188,7 @@ export default function Index() {
 
   return (
     <Layout>
-      {/* Language Toggle */}
-      <button
-        onClick={() => setLanguage(language === "pt" ? "en" : "pt")}
-        className="fixed top-4 right-4 bg-green-100 hover:bg-green-200 text-green-800 font-semibold py-2 px-4 rounded-full transition-colors duration-200"
-      >
-        {language === "pt" ? "EN 🇬🇧" : "PT 🇵🇹"}
-      </button>
-
+      <LanguageToggle />
       <div className="max-w-4xl mx-auto px-4 py-8">
         {/* Hero Section */}
         <div className="text-center mb-12">

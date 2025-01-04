@@ -9,7 +9,7 @@ export const meta: MetaFunction = () => {
 };
 
 export const loader = async () => {
-  return redirect("/compost");
+  return redirect("/compost-service-fundao");
 };
 
 export default function Index() {
