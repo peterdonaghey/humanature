@@ -111,7 +111,7 @@ export default function WhyCompost() {
           dioxide in the short term. <br />
           <br />
           Composting organic materials aerobically (in the presence of oxygen)
-          <strong>prevents methane from being released</strong> into the
+          <strong> prevents methane from being released</strong> into the
           atmosphere, reducing the overall environmental footprint.
         </p>
       ),
@@ -183,7 +183,7 @@ export default function WhyCompost() {
           <br />
           Além disso, as matérias-primas para fertilizantes sintéticos são
           frequentemente
-          <strong>mineradas ou extraídas da terra</strong>, causando destruição
+          <strong> mineradas ou extraídas da terra</strong>, causando destruição
           de ecossistemas.
         </p>
       ),
@@ -225,7 +225,7 @@ export default function WhyCompost() {
           participar de um estilo de vida mais sustentável. <br />
           <br />
           Ao compostar, os indivíduos contribuem para uma{" "}
-          <strong>economia circular</strong>
+          <strong>economia circular </strong>
           onde o resíduo orgânico é transformado em um produto útil, reduzindo a
           dependência de recursos externos e ajudando a fechar o ciclo natural.{" "}
           <br />
