@@ -17,7 +17,7 @@ export const Footer = () => {
       url: "https://www.instagram.com/quinta.do.amanha/",
     },
     {
-      name: "Facebook -- HumaNature",
+      name: "Facebook - HumaNature",
       icon: "👥",
       url: "https://www.facebook.com/HumaNatureOfficial",
     },
