@@ -1,5 +1,7 @@
-import {Link} from "@remix-run/react";
+import {Link, useOutletContext} from "@remix-run/react";
 import {useLanguage} from "../contexts/LanguageContext";
+import {LanguageToggle} from "./LanguageToggle";
+import {UserAvatar} from "./UserAvatar";
 
 export type NavigationOption = {
   to: string;
@@ -31,16 +33,25 @@ export const navigationOptionGroups: NavigationOption[] = [
     ptText: "quinta do amanhã",
     enText: "quinta do amanhã",
   },
+  {
+    to: "/posts",
+    ptText: "posts",
+    enText: "posts",
+  },
 ];
+
+type ContextType = {
+  user: {
+    id: string;
+    username: string;
+  } | null;
+};
 
 export const NavBar = () => {
   const {language} = useLanguage();
-  const colors = [
-    "bg-emerald-600",
-    "bg-amber-700",
-    "bg-sage-600",
-    "bg-terra-700",
-  ];
+  const {user} = useOutletContext<ContextType>();
+  console.log(user);
+  const colors = ["bg-emerald-600", "bg-amber-700", "bg-sky-600", "bg-red-700"];
 
   const NavBarButton = ({
     to,
@@ -63,7 +74,7 @@ export const NavBar = () => {
           className={`
             whitespace-nowrap
             text-sm font-medium
-            ${bgColor} text-stone-50
+            ${bgColor} text-stone-50 
             px-4 py-2 rounded-full
             shadow-sm
             opacity-90 hover:opacity-100
@@ -113,6 +124,10 @@ export const NavBar = () => {
           ))}
         </NavBarButton>
       ))}
+      <div className="flex items-end justify-end gap-4 w-full">
+        <LanguageToggle />
+        {user && <UserAvatar username={user.username} />}
+      </div>
     </nav>
   );
 };

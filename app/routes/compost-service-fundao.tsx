@@ -1,9 +1,7 @@
 import {Layout} from "../components/Layout";
 import {useLanguage} from "../contexts/LanguageContext";
-import {LanguageToggle} from "../components/LanguageToggle";
-import {Outlet} from "@remix-run/react";
 
-export default function Index() {
+export default function CompostServiceFundao() {
   const {language} = useLanguage();
 
   const compostableItems = [
@@ -188,7 +186,6 @@ export default function Index() {
 
   return (
     <Layout>
-      <LanguageToggle />
       <div className="max-w-4xl mx-auto px-4 py-8">
         {/* Hero Section */}
         <div className="text-center mb-12">

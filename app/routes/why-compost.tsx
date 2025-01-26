@@ -1,6 +1,5 @@
 import {Layout} from "../components/Layout";
 import {useLanguage} from "../contexts/LanguageContext";
-import {LanguageToggle} from "../components/LanguageToggle";
 
 export default function WhyCompost() {
   const {language} = useLanguage();
@@ -308,7 +307,6 @@ export default function WhyCompost() {
 
   return (
     <Layout>
-      <LanguageToggle />
       <div className="max-w-4xl mx-auto px-4 py-8">
         {/* Main Title */}
         <div className="text-center mb-12">
