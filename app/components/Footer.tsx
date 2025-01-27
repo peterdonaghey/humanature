@@ -102,11 +102,15 @@ export const Footer = () => {
         </div>
 
         {/* Good Day Message */}
-        <div className="mt-6 pt-4 border-t border-stone-200 text-center text-stone-500 text-xs">
+        <div className="mt-6 pt-4 border-t border-stone-200 text-center text-stone-500 text-xs cursor-default">
           <span className="inline-flex items-center gap-2">
             <span>✨</span>
             {language === "pt" ? "Tenha um dia mágico!" : "Have a magical day!"}
-            <span>✨</span>
+            <span className="cursor-default">
+              <Link to="/login" className="cursor-default">
+                ✨
+              </Link>
+            </span>
           </span>
         </div>
       </div>

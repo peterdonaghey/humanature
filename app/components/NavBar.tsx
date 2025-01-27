@@ -8,6 +8,8 @@ export type NavigationOption = {
   ptText: string;
   enText: string;
   children?: NavigationOption[];
+  allowedRoles?: string[];
+  isAllowed?: boolean;
 };
 
 export const navigationOptionGroups: NavigationOption[] = [
@@ -35,6 +37,7 @@ export const navigationOptionGroups: NavigationOption[] = [
   },
   {
     to: "/posts",
+    allowedRoles: ["admin", "superAdmin"],
     ptText: "posts",
     enText: "posts",
   },
@@ -44,28 +47,44 @@ type ContextType = {
   user: {
     id: string;
     username: string;
+    privilages: string[];
   } | null;
 };
 
 export const NavBar = () => {
   const {language} = useLanguage();
   const {user} = useOutletContext<ContextType>();
-  console.log(user);
+  // console.log(user?.privilages);
   const colors = ["bg-emerald-600", "bg-amber-700", "bg-sky-600", "bg-red-700"];
+
+  const isAllowed = (option: NavigationOption) => {
+    if (option.allowedRoles) {
+      return option.allowedRoles.some((role) =>
+        user?.privilages.includes(role)
+      );
+    }
+    return true;
+  };
 
   const NavBarButton = ({
     to,
     text,
     index,
     children,
+    isAllowed,
   }: {
     to: string;
     text: string;
     index: number;
     children?: React.ReactNode;
+    isAllowed?: boolean;
   }) => {
     const bgColor = colors[index % colors.length];
     const hasChildren = children !== undefined;
+
+    if (!isAllowed) {
+      return null;
+    }
 
     return (
       <div className="relative group">
@@ -113,6 +132,7 @@ export const NavBar = () => {
           to={option.to}
           text={language === "pt" ? option.ptText : option.enText}
           index={i}
+          isAllowed={isAllowed(option)}
         >
           {option.children?.map((child) => (
             <NavBarButton
