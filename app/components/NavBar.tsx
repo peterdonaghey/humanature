@@ -41,6 +41,12 @@ export const navigationOptionGroups: NavigationOption[] = [
     ptText: "posts",
     enText: "posts",
   },
+  {
+    to: "/users",
+    allowedRoles: ["superAdmin"],
+    ptText: "usuários",
+    enText: "users",
+  },
 ];
 
 type ContextType = {

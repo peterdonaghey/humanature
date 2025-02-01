@@ -7,7 +7,12 @@ type UserAvatarProps = {
 
 export const UserAvatar = ({username}: UserAvatarProps) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isClient, setIsClient] = useState(false);
   const avatarRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -23,7 +28,7 @@ export const UserAvatar = ({username}: UserAvatarProps) => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  return (
+  return isClient ? (
     <div ref={avatarRef} className="fixed top-7 right-28">
       <button
         onClick={() => setIsOpen(!isOpen)}
@@ -52,5 +57,5 @@ export const UserAvatar = ({username}: UserAvatarProps) => {
         </div>
       )}
     </div>
-  );
+  ) : null;
 };

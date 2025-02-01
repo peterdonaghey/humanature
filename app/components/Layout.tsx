@@ -3,7 +3,7 @@ import {Footer} from "./Footer";
 
 export const Layout = ({children}: {children: React.ReactNode}) => {
   return (
-    <main className="font-sans flex flex-col items-center h-screen overflow-y-scroll w-full">
+    <main className="font-sans flex flex-col items-center h-screen overflow-y-auto w-full">
       <div className="w-full">
         <div className="flex justify-center max-w-4xl mx-auto">
           <img

@@ -8,20 +8,23 @@ if (!sessionSecret) {
 }
 
 // Password hashing functions
-function hashPassword(password: string): string {
+export function hashPassword(password: string): string {
   const salt = randomBytes(16).toString("hex");
   const hash = scryptSync(password, salt, 64).toString("hex");
   return `${salt}:${hash}`;
 }
 
-function verifyPassword(password: string, hashedPassword: string): boolean {
+export function verifyPassword(
+  password: string,
+  hashedPassword: string
+): boolean {
   const [salt, hash] = hashedPassword.split(":");
   const hashVerify = scryptSync(password, salt, 64).toString("hex");
   return hash === hashVerify;
 }
 
 // Session storage configuration
-const storage = createCookieSessionStorage({
+export const storage = createCookieSessionStorage({
   cookie: {
     name: "humanature_session",
     secure: process.env.NODE_ENV === "production",
@@ -34,7 +37,7 @@ const storage = createCookieSessionStorage({
 });
 
 // Create user session
-async function createUserSession(userId: string, redirectTo: string) {
+export async function createUserSession(userId: string, redirectTo: string) {
   const session = await storage.getSession();
   session.set("userId", userId);
   return redirect(redirectTo, {
@@ -45,12 +48,12 @@ async function createUserSession(userId: string, redirectTo: string) {
 }
 
 // Get user session
-async function getUserSession(request: Request) {
+export async function getUserSession(request: Request) {
   return storage.getSession(request.headers.get("Cookie"));
 }
 
 // Get logged in user
-async function getUser(request: Request) {
+export async function getUser(request: Request) {
   const session = await getUserSession(request);
   const userId = session.get("userId");
   if (!userId) return null;
@@ -66,7 +69,7 @@ async function getUser(request: Request) {
 }
 
 // Login user
-async function login({
+export async function login({
   username,
   password,
 }: {
@@ -87,11 +90,16 @@ async function login({
     return {error: "Invalid credentials"};
   }
 
+  await db.user.update({
+    where: {id: user.id},
+    data: {lastLogin: new Date()},
+  });
+
   return {user};
 }
 
 // Logout user
-async function logout(request: Request) {
+export async function logout(request: Request) {
   const session = await getUserSession(request);
   return redirect("/", {
     headers: {
@@ -100,11 +108,76 @@ async function logout(request: Request) {
   });
 }
 
-export {
-  login,
-  logout,
-  createUserSession,
-  getUserSession,
-  getUser,
-  hashPassword,
-};
+export async function createUser({
+  username,
+  password,
+  privilages,
+  email,
+}: {
+  username: string;
+  password: string;
+  privilages: string[];
+  email: string;
+}) {
+  const existingUser = await db.user.findUnique({
+    where: {username},
+  });
+
+  if (existingUser) {
+    return {error: "Username already exists"};
+  }
+
+  const hashedPassword = hashPassword(password);
+
+  return db.user.create({
+    data: {
+      username,
+      password: hashedPassword,
+      privilages,
+      email,
+    },
+  });
+}
+
+export async function updateUserPassword(userId: string, newPassword: string) {
+  const hashedPassword = hashPassword(newPassword);
+
+  return db.user.update({
+    where: {id: userId},
+    data: {
+      password: hashedPassword,
+      updatedAt: new Date(),
+    },
+  });
+}
+
+export async function updateUser(
+  userId: string,
+  newUsername: string,
+  newPrivilages: string[],
+  newEmail: string
+) {
+  const existingUser = await db.user.findUnique({
+    where: {username: newUsername},
+  });
+
+  if (existingUser && existingUser.id !== userId) {
+    return {error: "Username already taken"};
+  }
+
+  return db.user.update({
+    where: {id: userId},
+    data: {
+      username: newUsername,
+      privilages: newPrivilages,
+      email: newEmail,
+      updatedAt: new Date(),
+    },
+  });
+}
+
+export async function deleteUser(userId: string) {
+  return db.user.delete({
+    where: {id: userId},
+  });
+}
