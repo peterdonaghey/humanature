@@ -11,6 +11,12 @@ import {json} from "@remix-run/node";
 import "./tailwind.css";
 import {LanguageProvider} from "./contexts/LanguageContext";
 import {getUser} from "./utils/auth.server";
+import "~/styles/prosemirror.css";
+import "@mantine/core/styles.css";
+import "@mantine/tiptap/styles.css";
+import "prosemirror-view/style/prosemirror.css";
+import {MantineProvider} from "@mantine/core";
+import {ColorSchemeScript} from "@mantine/core";
 
 export async function loader({request}: LoaderFunctionArgs) {
   const user = await getUser(request);
@@ -25,9 +31,10 @@ export function Layout({children}: {children: React.ReactNode}) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <Meta />
         <Links />
+        <ColorSchemeScript />
       </head>
       <body>
-        {children}
+        <MantineProvider>{children}</MantineProvider>
         <ScrollRestoration />
         <Scripts />
       </body>

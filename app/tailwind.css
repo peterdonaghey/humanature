@@ -8,4 +8,8 @@
 }
 
 @layer utilities {
+  /* Remove any color overrides that might interfere with the editor */
+  .ProseMirror span[style] {
+    all: revert;
+  }
 }

@@ -1,0 +1,59 @@
+.ProseMirror {
+  > * + * {
+    margin-top: 0.75em;
+  }
+
+  &:focus {
+    outline: none;
+  }
+
+  p {
+    margin: 0;
+  }
+
+  h1,
+  h2,
+  h3 {
+    margin: 1em 0 0.5em;
+  }
+
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  word-break: break-word;
+}
+
+.ProseMirror p.is-editor-empty:first-child::before {
+  color: #adb5bd;
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
+
+/* Remove the !important rules that might be causing conflicts */
+.ProseMirror span[style*="color"] {
+  color: currentColor;
+}
+
+/* Add support for highlight colors */
+.ProseMirror mark {
+  background-color: var(--highlight-color);
+  padding: 0 0.2em;
+}
+
+.ProseMirror p {
+  margin: 1em 0;
+}
+
+.ProseMirror > *:first-child {
+  margin-top: 0;
+}
+
+.ProseMirror > *:last-child {
+  margin-bottom: 0;
+}
+
+/* Override any Mantine styles that might be interfering */
+.mantine-RichTextEditor-content span[style*="color"] {
+  color: inherit;
+}

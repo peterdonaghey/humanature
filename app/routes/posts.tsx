@@ -1,14 +1,29 @@
-import {json, LoaderFunction} from "@remix-run/node";
-import {useLoaderData, Link} from "@remix-run/react";
+import {json, LoaderFunction, ActionFunction} from "@remix-run/node";
+import {useLoaderData, Link, Form, useNavigation} from "@remix-run/react";
 import {Layout} from "../components/Layout";
-import {getPosts} from "~/utils/posts.server";
+import {getPosts, deletePost} from "~/utils/posts.server";
 import {Post} from "@prisma/client";
 
 type LoaderData = {
   posts: Post[];
 };
 
-// Loader function to fetch posts
+export const action: ActionFunction = async ({request}) => {
+  const formData = await request.formData();
+  const postId = formData.get("postId");
+
+  if (typeof postId !== "string") {
+    return json({error: "Invalid post ID"}, {status: 400});
+  }
+
+  const result = await deletePost(postId);
+  if (!result.success) {
+    return json({error: result.error}, {status: 500});
+  }
+
+  return json({success: true});
+};
+
 export const loader: LoaderFunction = async () => {
   const posts = await getPosts();
   return json({posts});
@@ -16,6 +31,13 @@ export const loader: LoaderFunction = async () => {
 
 export default function Posts() {
   const {posts} = useLoaderData<LoaderData>();
+  const navigation = useNavigation();
+  const isDeleting = navigation.state === "submitting";
+
+  const formatDate = (date: string | Date) => {
+    const d = new Date(date);
+    return d.toISOString().split("T")[0]; // Returns YYYY-MM-DD format
+  };
 
   return (
     <Layout>
@@ -39,17 +61,35 @@ export default function Posts() {
             posts.map((post) => (
               <article
                 key={post.id}
-                className="bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow"
+                className="bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow relative group"
               >
+                <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <Form method="post" className="inline">
+                    <input type="hidden" name="postId" value={post.id} />
+                    <button
+                      type="submit"
+                      disabled={isDeleting}
+                      className="text-red-500 hover:text-red-700 transition-colors"
+                      onClick={(e) => {
+                        if (
+                          !confirm("Are you sure you want to delete this post?")
+                        ) {
+                          e.preventDefault();
+                        }
+                      }}
+                    >
+                      {isDeleting ? "Deleting..." : "Delete"}
+                    </button>
+                  </Form>
+                </div>
                 <h2 className="text-2xl font-semibold mb-2">{post.title}</h2>
                 <p className="text-gray-600 mb-4">
-                  {new Date(post.createdAt).toLocaleDateString()}
+                  {formatDate(post.createdAt)}
                 </p>
-                <p className="text-gray-800">
-                  {post.content.length > 200
-                    ? `${post.content.substring(0, 200)}...`
-                    : post.content}
-                </p>
+                <div
+                  className="prose prose-sm sm:prose lg:prose-lg max-w-none prose-colors"
+                  dangerouslySetInnerHTML={{__html: post.content}}
+                />
               </article>
             ))
           )}

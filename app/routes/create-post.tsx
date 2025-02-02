@@ -3,14 +3,29 @@ import {Form, useActionData, useNavigation} from "@remix-run/react";
 import {json, redirect} from "@remix-run/node";
 import type {ActionFunction} from "@remix-run/node";
 import {createPost} from "~/utils/posts.server";
+import {Editor} from "~/components/RichTextEditor";
+import {useState} from "react";
+
+type ActionData = {
+  error?: string;
+};
 
 export const action: ActionFunction = async ({request}) => {
   const formData = await request.formData();
   const title = formData.get("title");
   const content = formData.get("content");
 
-  if (typeof title !== "string" || typeof content !== "string") {
-    return json({error: "Invalid form submission"}, {status: 400});
+  console.log("content", content);
+
+  switch (true) {
+    case title === null:
+      return json({error: "Missing title"}, {status: 400});
+    case content === null:
+      return json({error: "Missing content"}, {status: 400});
+    case typeof title !== "string" || typeof content !== "string":
+      return json({error: "Invalid form submission"}, {status: 400});
+    default:
+      break;
   }
 
   await createPost(title, content);
@@ -18,13 +33,14 @@ export const action: ActionFunction = async ({request}) => {
 };
 
 export default function CreatePost() {
-  const actionData = useActionData<typeof action>();
+  const actionData = useActionData<ActionData>();
   const navigation = useNavigation();
   const isSubmitting = navigation.state === "submitting";
+  const [content, setContent] = useState("");
 
   return (
     <Layout>
-      <div className="max-w-2xl mx-auto p-6">
+      <div className="w-[950px] mx-auto p-6">
         <h1 className="text-3xl font-bold mb-8 text-center">Create New Post</h1>
 
         <Form method="post" className="space-y-6">
@@ -41,17 +57,12 @@ export default function CreatePost() {
             />
           </div>
 
-          <div>
+          <div className="prose w-full">
             <label htmlFor="content" className="block text-sm font-medium mb-2">
               Content
             </label>
-            <textarea
-              id="content"
-              name="content"
-              rows={8}
-              className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-              required
-            />
+            <input type="hidden" name="content" value={content} />
+            <Editor content={content} onChange={setContent} />
           </div>
 
           {actionData?.error && (
