@@ -146,6 +146,7 @@ export const NavBar = () => {
               to={child.to}
               text={language === "pt" ? child.ptText : child.enText}
               index={i}
+              isAllowed={isAllowed(child)}
             />
           ))}
         </NavBarButton>
