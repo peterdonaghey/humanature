@@ -12,6 +12,8 @@
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.740.0",
+    "@aws-sdk/lib-storage": "^3.740.0",
+    "@aws-sdk/s3-request-presigner": "^3.740.0",
     "@aws-sdk/smithy-client": "^3.374.0",
     "@aws-sdk/types": "^3.734.0",
     "@aws-sdk/util-utf8-browser": "^3.259.0",
@@ -27,6 +29,7 @@
     "@tabler/icons-react": "^3.29.0",
     "@tiptap/extension-color": "^2.11.5",
     "@tiptap/extension-highlight": "^2.11.5",
+    "@tiptap/extension-image": "^2.11.5",
     "@tiptap/extension-link": "^2.11.5",
     "@tiptap/extension-list-item": "^2.11.5",
     "@tiptap/extension-subscript": "^2.11.5",
