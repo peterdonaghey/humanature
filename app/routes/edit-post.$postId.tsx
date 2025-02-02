@@ -5,65 +5,77 @@ import {
   useLoaderData,
   useNavigation,
 } from "@remix-run/react";
-import {json, redirect} from "@remix-run/node";
-import type {ActionFunction, LoaderFunction} from "@remix-run/node";
-import {createPost} from "~/utils/posts.server";
+import {
+  json,
+  redirect,
+  type ActionFunctionArgs,
+  type LoaderFunctionArgs,
+} from "@remix-run/node";
 import {Editor} from "~/components/RichTextEditor";
 import {useState} from "react";
 import {getProjects} from "~/utils/projects.server";
-import {Project} from "@prisma/client";
+import db from "~/utils/db.server";
 
-type ActionData = {
-  error?: string;
-};
+export async function loader({params}: LoaderFunctionArgs) {
+  const post = await db.post.findUnique({
+    where: {id: params.postId},
+    include: {project: true},
+  });
 
-type LoaderData = {
-  projects: Project[];
-};
+  if (!post) {
+    throw new Response("Post not found", {status: 404});
+  }
 
-export const loader: LoaderFunction = async () => {
   const projects = await getProjects();
-  return json({projects});
-};
+  return json({post, projects});
+}
 
-export const action: ActionFunction = async ({request}) => {
+export async function action({request, params}: ActionFunctionArgs) {
   const formData = await request.formData();
   const title = formData.get("title");
   const content = formData.get("content");
   const projectId = formData.get("projectId");
 
-  console.log("content", content);
-
-  switch (true) {
-    case title === null:
-      return json({error: "Missing title"}, {status: 400});
-    case content === null:
-      return json({error: "Missing content"}, {status: 400});
-    case projectId === null:
-      return json({error: "Please select a project"}, {status: 400});
-    case typeof title !== "string" ||
-      typeof content !== "string" ||
-      typeof projectId !== "string":
-      return json({error: "Invalid form submission"}, {status: 400});
-    default:
-      break;
+  if (!title || !content || !projectId) {
+    return json(
+      {error: "Title, content and project are required"},
+      {status: 400}
+    );
   }
 
-  await createPost(title, content, projectId);
-  return redirect("/projects/" + projectId);
-};
+  if (
+    typeof title !== "string" ||
+    typeof content !== "string" ||
+    typeof projectId !== "string"
+  ) {
+    return json({error: "Invalid form submission"}, {status: 400});
+  }
 
-export default function CreatePost() {
-  const {projects} = useLoaderData<LoaderData>();
-  const actionData = useActionData<ActionData>();
+  await db.post.update({
+    where: {id: params.postId},
+    data: {
+      title,
+      content,
+      project: {
+        connect: {id: projectId},
+      },
+    },
+  });
+
+  return redirect(`/project/${projectId}`);
+}
+
+export default function EditPost() {
+  const {post, projects} = useLoaderData<typeof loader>();
+  const actionData = useActionData<typeof action>();
   const navigation = useNavigation();
   const isSubmitting = navigation.state === "submitting";
-  const [content, setContent] = useState("");
+  const [content, setContent] = useState(post.content);
 
   return (
     <Layout>
       <div className="w-[950px] mx-auto p-6">
-        <h1 className="text-3xl font-bold mb-8 text-center">Create New Post</h1>
+        <h1 className="text-3xl font-bold mb-8 text-center">Edit Post</h1>
 
         <Form method="post" className="space-y-6">
           <div>
@@ -76,6 +88,7 @@ export default function CreatePost() {
             <select
               id="projectId"
               name="projectId"
+              defaultValue={post.project?.id}
               className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
               required
             >
@@ -96,6 +109,7 @@ export default function CreatePost() {
               type="text"
               id="title"
               name="title"
+              defaultValue={post.title}
               className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
               required
             />
@@ -113,13 +127,21 @@ export default function CreatePost() {
             <div className="text-red-600 text-sm">{actionData.error}</div>
           )}
 
-          <button
-            type="submit"
-            disabled={isSubmitting}
-            className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-2 px-4 rounded-lg transition-colors disabled:opacity-50"
-          >
-            {isSubmitting ? "Creating..." : "Create Post"}
-          </button>
+          <div className="flex justify-end gap-4">
+            <a
+              href={`/project/${post.project?.id}`}
+              className="px-4 py-2 text-gray-600 hover:text-gray-800 transition-colors"
+            >
+              Cancel
+            </a>
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-2 rounded-lg transition-colors disabled:opacity-50"
+            >
+              {isSubmitting ? "Saving..." : "Save Changes"}
+            </button>
+          </div>
         </Form>
       </div>
     </Layout>

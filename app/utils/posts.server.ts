@@ -1,10 +1,19 @@
 import db from "./db.server";
 
-export async function createPost(title: string, content: string) {
+export async function createPost(
+  title: string,
+  content: string,
+  projectId: string
+) {
   return db.post.create({
     data: {
       title,
       content,
+      project: {
+        connect: {
+          id: projectId,
+        },
+      },
     },
   });
 }
@@ -12,6 +21,21 @@ export async function createPost(title: string, content: string) {
 export async function getPosts() {
   return db.post.findMany({
     orderBy: {createdAt: "desc"},
+    include: {
+      project: true,
+    },
+  });
+}
+
+export async function getPostsByProject(projectId: string) {
+  return db.post.findMany({
+    where: {
+      projectId,
+    },
+    orderBy: {createdAt: "desc"},
+    include: {
+      project: true,
+    },
   });
 }
 

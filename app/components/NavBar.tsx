@@ -36,10 +36,10 @@ export const navigationOptionGroups: NavigationOption[] = [
     enText: "quinta do amanhã",
   },
   {
-    to: "/posts",
+    to: "/projects",
     allowedRoles: ["admin"],
-    ptText: "posts",
-    enText: "posts",
+    ptText: "projetos",
+    enText: "projects",
   },
   {
     to: "/users",
