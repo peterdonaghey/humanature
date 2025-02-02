@@ -37,13 +37,13 @@ export const navigationOptionGroups: NavigationOption[] = [
   },
   {
     to: "/posts",
-    allowedRoles: ["admin", "superAdmin"],
+    allowedRoles: ["admin"],
     ptText: "posts",
     enText: "posts",
   },
   {
     to: "/users",
-    allowedRoles: ["superAdmin"],
+    allowedRoles: ["userAdmin"],
     ptText: "usuários",
     enText: "users",
   },

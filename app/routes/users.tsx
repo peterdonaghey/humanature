@@ -8,7 +8,7 @@ import {formatTimeAgo} from "~/functions/time";
 
 export async function loader({request}: LoaderFunctionArgs) {
   const user = await getUser(request);
-  if (!user?.privilages.includes("superAdmin")) {
+  if (!user?.privilages.includes("userAdmin")) {
     return redirect("/");
   }
 

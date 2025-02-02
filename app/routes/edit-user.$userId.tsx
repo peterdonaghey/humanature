@@ -13,7 +13,7 @@ import {AvailablePrivilages} from "~/functions/prililages";
 
 export async function loader({request, params}: LoaderFunctionArgs) {
   const user = await getUser(request);
-  if (!user?.privilages.includes("superAdmin")) {
+  if (!user?.privilages.includes("userAdmin")) {
     return redirect("/");
   }
 
@@ -32,7 +32,7 @@ export async function loader({request, params}: LoaderFunctionArgs) {
 
 export async function action({request, params}: ActionFunctionArgs) {
   const currentUser = await getUser(request);
-  if (!currentUser?.privilages.includes("superAdmin")) {
+  if (!currentUser?.privilages.includes("userAdmin")) {
     return redirect("/");
   }
 

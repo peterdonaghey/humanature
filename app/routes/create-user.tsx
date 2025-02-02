@@ -35,7 +35,7 @@ export async function action({request}: ActionFunctionArgs) {
 
 export async function loader({request}: LoaderFunctionArgs) {
   const user = await getUser(request);
-  if (!user?.privilages.includes("superAdmin")) {
+  if (!user?.privilages.includes("userAdmin")) {
     return redirect("/");
   }
   return null;
@@ -43,7 +43,7 @@ export async function loader({request}: LoaderFunctionArgs) {
 
 export default function CreateUser() {
   const actionData = useActionData<typeof action>();
-  const privilegesOptions = ["admin", "superAdmin"];
+  const privilegesOptions = ["admin", "userAdmin"];
 
   return (
     <Layout>
