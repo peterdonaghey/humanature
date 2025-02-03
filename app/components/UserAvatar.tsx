@@ -29,7 +29,7 @@ export const UserAvatar = ({username}: UserAvatarProps) => {
   }, []);
 
   return isClient ? (
-    <div ref={avatarRef} className="fixed top-7 right-28">
+    <div ref={avatarRef} className="relative">
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="w-10 h-10 rounded-full opacity-50 bg-emerald-600 text-white 

@@ -6,7 +6,7 @@ export function LanguageToggle() {
   return (
     <button
       onClick={() => setLanguage(language === "pt" ? "en" : "pt")}
-      className="fixed top-7 right-7 bg-green-100 hover:bg-green-200 text-green-800 font-semibold py-2 px-4 rounded-full transition-colors duration-200"
+      className=" bg-green-100 hover:bg-green-200 text-green-800 font-semibold py-2 px-4 rounded-full transition-colors duration-200 whitespace-nowrap"
     >
       {language === "pt" ? "EN 🇬🇧" : "PT 🇵🇹"}
     </button>

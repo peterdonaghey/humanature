@@ -10,42 +10,49 @@ export type NavigationOption = {
   children?: NavigationOption[];
   allowedRoles?: string[];
   isAllowed?: boolean;
+  bgColor?: string;
 };
 
 export const navigationOptionGroups: NavigationOption[] = [
   {
+    to: "/quintadoamanha",
+    ptText: "quinta do amanhã",
+    enText: "quinta do amanhã",
+    bgColor: "bg-amber-700",
+  },
+  {
     to: "/compost-service-fundao",
     ptText: "compostagem",
     enText: "compost",
+    bgColor: "bg-emerald-600",
     children: [
       {
         to: "/why-compost",
         ptText: "porquê compostar?",
         enText: "why compost?",
+        bgColor: "bg-emerald-600",
       },
       {
         to: "/compost-service-fundao",
         ptText: "serviço de compostagem fundão",
         enText: "compost service fundão",
+        bgColor: "bg-emerald-600",
       },
     ],
-  },
-  {
-    to: "/quintadoamanha",
-    ptText: "quinta do amanhã",
-    enText: "quinta do amanhã",
   },
   {
     to: "/projects",
     allowedRoles: ["admin"],
     ptText: "projetos",
     enText: "projects",
+    bgColor: "bg-sky-600",
   },
   {
     to: "/users",
     allowedRoles: ["userAdmin"],
     ptText: "usuários",
     enText: "users",
+    bgColor: "bg-red-600",
   },
 ];
 
@@ -61,7 +68,6 @@ export const NavBar = () => {
   const {language} = useLanguage();
   const {user} = useOutletContext<ContextType>();
   // console.log(user?.privilages);
-  const colors = ["bg-emerald-600", "bg-amber-700", "bg-sky-600", "bg-red-700"];
 
   const isAllowed = (option: NavigationOption) => {
     if (option.allowedRoles) {
@@ -75,17 +81,16 @@ export const NavBar = () => {
   const NavBarButton = ({
     to,
     text,
-    index,
     children,
     isAllowed,
+    bgColor,
   }: {
     to: string;
     text: string;
-    index: number;
     children?: React.ReactNode;
     isAllowed?: boolean;
+    bgColor?: string;
   }) => {
-    const bgColor = colors[index % colors.length];
     const hasChildren = children !== undefined;
 
     if (!isAllowed) {
@@ -128,30 +133,32 @@ export const NavBar = () => {
   return (
     <nav
       className="
-      flex justify-center items-center gap-4
+      flex justify-between items-center gap-4 w-full
       py-4
     "
     >
-      {navigationOptionGroups.map((option, i) => (
-        <NavBarButton
-          key={option.to}
-          to={option.to}
-          text={language === "pt" ? option.ptText : option.enText}
-          index={i}
-          isAllowed={isAllowed(option)}
-        >
-          {option.children?.map((child) => (
-            <NavBarButton
-              key={child.to}
-              to={child.to}
-              text={language === "pt" ? child.ptText : child.enText}
-              index={i}
-              isAllowed={isAllowed(child)}
-            />
-          ))}
-        </NavBarButton>
-      ))}
-      <div className="flex items-end justify-end gap-4 w-full">
+      <div className="flex items-center justify-center gap-4 w-full">
+        {navigationOptionGroups.map((option) => (
+          <NavBarButton
+            key={option.to}
+            to={option.to}
+            text={language === "pt" ? option.ptText : option.enText}
+            isAllowed={isAllowed(option)}
+            bgColor={option.bgColor}
+          >
+            {option.children?.map((child) => (
+              <NavBarButton
+                key={child.to}
+                to={child.to}
+                text={language === "pt" ? child.ptText : child.enText}
+                isAllowed={isAllowed(child)}
+                bgColor={child.bgColor}
+              />
+            ))}
+          </NavBarButton>
+        ))}
+      </div>
+      <div className="flex items-end justify-end gap-4 w-fit">
         <LanguageToggle />
         {user && <UserAvatar username={user.username} />}
       </div>
