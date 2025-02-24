@@ -137,7 +137,7 @@ export const NavBar = () => {
       py-4
     "
     >
-      <div className="flex items-center justify-center gap-4 w-full">
+      <div className="flex items-center justify-left gap-4 w-full">
         {navigationOptionGroups.map((option) => (
           <NavBarButton
             key={option.to}
