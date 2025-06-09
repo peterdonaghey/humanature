@@ -15,15 +15,14 @@ import "~/styles/prosemirror.css";
 import "@mantine/core/styles.css";
 import "@mantine/tiptap/styles.css";
 import "prosemirror-view/style/prosemirror.css";
-import {MantineProvider} from "@mantine/core";
-import {ColorSchemeScript} from "@mantine/core";
+import {MantineProvider, ColorSchemeScript} from "@mantine/core";
 
 export async function loader({request}: LoaderFunctionArgs) {
   const user = await getUser(request);
   return json({user});
 }
 
-export function Layout({children}: {children: React.ReactNode}) {
+export function RootLayout({children}: {children: React.ReactNode}) {
   return (
     <html lang="en">
       <head>
@@ -47,9 +46,9 @@ export default function App() {
 
   return (
     <LanguageProvider>
-      <Layout>
+      <RootLayout>
         <Outlet context={{user}} />
-      </Layout>
+      </RootLayout>
     </LanguageProvider>
   );
 }

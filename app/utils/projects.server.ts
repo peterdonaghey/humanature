@@ -23,6 +23,7 @@ export async function getProject(id: string) {
     where: {id},
     include: {
       posts: true,
+      documents: true,
     },
   });
 }

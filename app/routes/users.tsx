@@ -5,6 +5,7 @@ import {Layout} from "~/components/Layout";
 import db from "~/utils/db.server";
 import {getUser, updateUserPassword} from "~/utils/auth.server";
 import {formatTimeAgo} from "~/functions/time";
+import {formatDateShort} from "~/utils/date";
 
 export async function loader({request}: LoaderFunctionArgs) {
   const user = await getUser(request);
@@ -88,7 +89,7 @@ export default function Users() {
                     {user.privilages.join(", ")}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    {new Date(user.createdAt).toLocaleDateString()}
+                    {formatDateShort(user.createdAt)}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     {user.lastLogin

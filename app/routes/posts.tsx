@@ -4,6 +4,7 @@ import {Layout} from "../components/Layout";
 import {getPosts, deletePost} from "~/utils/posts.server";
 import {Post} from "@prisma/client";
 import {getUser} from "../utils/auth.server";
+import {formatDateShort} from "~/utils/date";
 
 type LoaderData = {
   posts: Post[];
@@ -39,11 +40,6 @@ export default function Posts() {
   const navigation = useNavigation();
   const isDeleting = navigation.state === "submitting";
 
-  const formatDate = (date: string | Date) => {
-    const d = new Date(date);
-    return d.toISOString().split("T")[0]; // Returns YYYY-MM-DD format
-  };
-
   return (
     <Layout>
       <div className="max-w-4xl mx-auto px-4">
@@ -64,11 +60,11 @@ export default function Posts() {
             </p>
           ) : (
             posts.map((post) => (
-              <div className="w-full mx-auto p-6 bg-stone-50 rounded-lg my-4">
-                <article
-                  key={post.id}
-                  className="bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow relative group"
-                >
+              <div
+                key={post.id}
+                className="w-full mx-auto p-6 bg-stone-50 rounded-lg my-4"
+              >
+                <article className="bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow relative group">
                   <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
                     <Form method="post" className="inline">
                       <input type="hidden" name="postId" value={post.id} />
@@ -92,7 +88,7 @@ export default function Posts() {
                   </div>
                   <h2 className="text-2xl font-semibold mb-2">{post.title}</h2>
                   <p className="text-gray-600 mb-4">
-                    {formatDate(post.createdAt)}
+                    {formatDateShort(post.createdAt)}
                   </p>
                   <div
                     className="prose prose-sm sm:prose lg:prose-lg max-w-none prose-colors"
