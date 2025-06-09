@@ -3,7 +3,7 @@ import {useLoaderData, Link, Form, useNavigation} from "@remix-run/react";
 import {Layout} from "../components/Layout";
 import {getPosts, deletePost} from "~/utils/posts.server";
 import {Post} from "@prisma/client";
-import {getUser} from "../utils/auth.server";
+import {getUser, requireAdmin} from "../utils/auth.server";
 import {formatDateShort} from "~/utils/date";
 
 type LoaderData = {
@@ -11,6 +11,8 @@ type LoaderData = {
 };
 
 export const action: ActionFunction = async ({request}) => {
+  await requireAdmin(request);
+
   const formData = await request.formData();
   const postId = formData.get("postId");
 

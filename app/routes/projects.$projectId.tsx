@@ -3,13 +3,7 @@ import {
   type LoaderFunctionArgs,
   type ActionFunctionArgs,
 } from "@remix-run/node";
-import {
-  Link,
-  useLoaderData,
-  Form,
-  useNavigation,
-  useOutletContext,
-} from "@remix-run/react";
+import {Link, useLoaderData, Form, useNavigation} from "@remix-run/react";
 import {getProject} from "~/utils/projects.server";
 import {deletePost} from "~/utils/posts.server";
 import {Layout} from "../components/Layout";
@@ -17,8 +11,12 @@ import {useState} from "react";
 import db from "~/utils/db.server";
 import {deleteFromS3} from "~/utils/aws.server";
 import {formatDate} from "~/utils/date";
+import {ProjectBanner} from "~/components/ProjectBanner";
+import {getUser, isAdmin, requireAdmin} from "~/utils/auth.server";
 
 export async function action({request}: ActionFunctionArgs) {
+  await requireAdmin(request);
+
   const formData = await request.formData();
   const intent = formData.get("intent");
 
@@ -72,7 +70,7 @@ export async function action({request}: ActionFunctionArgs) {
   return json({error: "Invalid action"}, {status: 400});
 }
 
-export async function loader({params}: LoaderFunctionArgs) {
+export async function loader({params, request}: LoaderFunctionArgs) {
   console.log("Project detail loader called with params:", params);
 
   if (!params.projectId) {
@@ -81,6 +79,7 @@ export async function loader({params}: LoaderFunctionArgs) {
   }
 
   try {
+    const user = await getUser(request);
     const project = await getProject(params.projectId);
     console.log("Project found:", project ? "yes" : "no");
 
@@ -88,29 +87,18 @@ export async function loader({params}: LoaderFunctionArgs) {
       throw new Response("Project not found", {status: 404});
     }
 
-    return json({project});
+    return json({project, isAdmin: isAdmin(user)});
   } catch (error) {
     console.error("Error loading project:", error);
     throw new Response("Error loading project", {status: 500});
   }
 }
 
-type ContextType = {
-  user: {
-    id: string;
-    username: string;
-    privilages: string[];
-  } | null;
-};
-
 export default function ProjectDetails() {
-  const {project} = useLoaderData<typeof loader>();
+  const {project, isAdmin: userIsAdmin} = useLoaderData<typeof loader>();
   const navigation = useNavigation();
   const isDeleting = navigation.state === "submitting";
   const [isUploading, setIsUploading] = useState(false);
-  const {user} = useOutletContext<ContextType>();
-
-  const isAdmin = user?.privilages.includes("admin");
 
   const handleDocumentUpload = async (
     event: React.ChangeEvent<HTMLInputElement>
@@ -191,25 +179,36 @@ export default function ProjectDetails() {
   return (
     <Layout>
       <div className="container mx-auto px-4 py-8">
+        {project.banner && (
+          <ProjectBanner
+            banner={project.banner}
+            projectName={project.name}
+            className="mb-8"
+            variant="page"
+          />
+        )}
+
         <div className="mb-8">
           <div className="flex justify-between items-center mb-4">
             <h1 className="text-3xl font-bold text-emerald-800">
               {project.name}
             </h1>
-            <div className="space-x-4">
-              <Link
-                to={`/edit-project/${project.id}`}
-                className="inline-flex items-center px-4 py-2 border border-emerald-600 text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors"
-              >
-                Edit Project
-              </Link>
-              <Link
-                to="/create-post"
-                className="inline-flex items-center px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg transition-colors"
-              >
-                New Post
-              </Link>
-            </div>
+            {userIsAdmin && (
+              <div className="space-x-4">
+                <Link
+                  to={`/edit-project/${project.id}`}
+                  className="inline-flex items-center px-4 py-2 border border-emerald-600 text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors"
+                >
+                  Edit Project
+                </Link>
+                <Link
+                  to="/create-post"
+                  className="inline-flex items-center px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg transition-colors"
+                >
+                  New Post
+                </Link>
+              </div>
+            )}
           </div>
           <p className="text-gray-600 mb-4">{project.description}</p>
           <div className="text-sm text-gray-500">
@@ -222,49 +221,51 @@ export default function ProjectDetails() {
             <h2 className="text-xl font-semibold text-emerald-800">
               Documents
             </h2>
-            <div className="relative">
-              <input
-                type="file"
-                onChange={handleDocumentUpload}
-                className="hidden"
-                id="document-upload"
-                disabled={isUploading}
-              />
-              <label
-                htmlFor="document-upload"
-                className={`inline-flex items-center px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg transition-colors cursor-pointer ${
-                  isUploading ? "opacity-50 cursor-not-allowed" : ""
-                }`}
-              >
-                {isUploading ? (
-                  <span className="flex items-center">
-                    <svg
-                      className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                    >
-                      <circle
-                        className="opacity-25"
-                        cx="12"
-                        cy="12"
-                        r="10"
-                        stroke="currentColor"
-                        strokeWidth="4"
-                      ></circle>
-                      <path
-                        className="opacity-75"
-                        fill="currentColor"
-                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                      ></path>
-                    </svg>
-                    Uploading...
-                  </span>
-                ) : (
-                  "Upload Document"
-                )}
-              </label>
-            </div>
+            {userIsAdmin && (
+              <div className="relative">
+                <input
+                  type="file"
+                  onChange={handleDocumentUpload}
+                  className="hidden"
+                  id="document-upload"
+                  disabled={isUploading}
+                />
+                <label
+                  htmlFor="document-upload"
+                  className={`inline-flex items-center px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg transition-colors cursor-pointer ${
+                    isUploading ? "opacity-50 cursor-not-allowed" : ""
+                  }`}
+                >
+                  {isUploading ? (
+                    <span className="flex items-center">
+                      <svg
+                        className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                      >
+                        <circle
+                          className="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          strokeWidth="4"
+                        ></circle>
+                        <path
+                          className="opacity-75"
+                          fill="currentColor"
+                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                        ></path>
+                      </svg>
+                      Uploading...
+                    </span>
+                  ) : (
+                    "Upload Document"
+                  )}
+                </label>
+              </div>
+            )}
           </div>
 
           <div className="space-y-2">
@@ -312,7 +313,7 @@ export default function ProjectDetails() {
                     >
                       Download
                     </a>
-                    {isAdmin && (
+                    {userIsAdmin && (
                       <Form method="post" className="inline">
                         <input
                           type="hidden"
@@ -359,12 +360,14 @@ export default function ProjectDetails() {
           {project.posts.length === 0 ? (
             <div className="text-center py-12 bg-gray-50 rounded-lg">
               <p className="text-gray-500 mb-4">No posts created yet</p>
-              <Link
-                to="/create-post"
-                className="inline-flex items-center px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg transition-colors"
-              >
-                Create First Post
-              </Link>
+              {userIsAdmin && (
+                <Link
+                  to="/create-post"
+                  className="inline-flex items-center px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg transition-colors"
+                >
+                  Create First Post
+                </Link>
+              )}
             </div>
           ) : (
             <div className="space-y-4">
@@ -377,36 +380,42 @@ export default function ProjectDetails() {
                     <h3 className="text-xl font-semibold text-emerald-800">
                       {post.title}
                     </h3>
-                    <div className="flex space-x-2">
-                      <Link
-                        to={`/edit-post/${post.id}`}
-                        className="text-emerald-600 hover:text-emerald-700 text-sm"
-                      >
-                        Edit
-                      </Link>
-                      <Form method="post" className="inline">
-                        <input type="hidden" name="intent" value="deletePost" />
-                        <input type="hidden" name="postId" value={post.id} />
-                        <button
-                          type="submit"
-                          className={`text-red-600 hover:text-red-700 text-sm ${
-                            isDeleting ? "opacity-50" : ""
-                          }`}
-                          disabled={isDeleting}
-                          onClick={(e) => {
-                            if (
-                              !confirm(
-                                "Are you sure you want to delete this post?"
-                              )
-                            ) {
-                              e.preventDefault();
-                            }
-                          }}
+                    {userIsAdmin && (
+                      <div className="flex space-x-2">
+                        <Link
+                          to={`/edit-post/${post.id}`}
+                          className="text-emerald-600 hover:text-emerald-700 text-sm"
                         >
-                          {isDeleting ? "Deleting..." : "Delete"}
-                        </button>
-                      </Form>
-                    </div>
+                          Edit
+                        </Link>
+                        <Form method="post" className="inline">
+                          <input
+                            type="hidden"
+                            name="intent"
+                            value="deletePost"
+                          />
+                          <input type="hidden" name="postId" value={post.id} />
+                          <button
+                            type="submit"
+                            className={`text-red-600 hover:text-red-700 text-sm ${
+                              isDeleting ? "opacity-50" : ""
+                            }`}
+                            disabled={isDeleting}
+                            onClick={(e) => {
+                              if (
+                                !confirm(
+                                  "Are you sure you want to delete this post?"
+                                )
+                              ) {
+                                e.preventDefault();
+                              }
+                            }}
+                          >
+                            {isDeleting ? "Deleting..." : "Delete"}
+                          </button>
+                        </Form>
+                      </div>
+                    )}
                   </div>
                   <div
                     className="prose prose-emerald max-w-none"

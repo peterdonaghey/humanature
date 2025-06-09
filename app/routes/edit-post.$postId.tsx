@@ -15,8 +15,11 @@ import {Editor} from "~/components/RichTextEditor";
 import {useState} from "react";
 import {getProjects} from "~/utils/projects.server";
 import db from "~/utils/db.server";
+import {requireAdmin} from "~/utils/auth.server";
 
-export async function loader({params}: LoaderFunctionArgs) {
+export async function loader({params, request}: LoaderFunctionArgs) {
+  await requireAdmin(request);
+
   const post = await db.post.findUnique({
     where: {id: params.postId},
     include: {project: true},
@@ -31,6 +34,8 @@ export async function loader({params}: LoaderFunctionArgs) {
 }
 
 export async function action({request, params}: ActionFunctionArgs) {
+  await requireAdmin(request);
+
   const formData = await request.formData();
   const title = formData.get("title");
   const content = formData.get("content");

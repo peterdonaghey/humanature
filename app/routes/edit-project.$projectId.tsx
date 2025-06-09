@@ -7,8 +7,13 @@ import {
 import {Form, useActionData, useLoaderData} from "@remix-run/react";
 import {getProject, updateProject} from "~/utils/projects.server";
 import {Layout} from "../components/Layout";
+import {BannerUpload} from "~/components/BannerUpload";
+import {useState} from "react";
+import {requireAdmin} from "~/utils/auth.server";
 
-export async function loader({params}: LoaderFunctionArgs) {
+export async function loader({params, request}: LoaderFunctionArgs) {
+  await requireAdmin(request);
+
   const project = await getProject(params.projectId as string);
   if (!project) {
     throw new Response("Project not found", {status: 404});
@@ -17,21 +22,34 @@ export async function loader({params}: LoaderFunctionArgs) {
 }
 
 export async function action({request, params}: ActionFunctionArgs) {
+  await requireAdmin(request);
+
   const formData = await request.formData();
   const name = formData.get("name") as string;
   const description = formData.get("description") as string;
+  const banner = formData.get("banner") as string;
+  const currentBanner = formData.get("currentBanner") as string;
 
   if (!name || !description) {
     return json({error: "Name and description are required"}, {status: 400});
   }
 
-  await updateProject(params.projectId as string, name, description);
-  return redirect(`/project/${params.projectId}`);
+  await updateProject(
+    params.projectId as string,
+    name,
+    description,
+    banner || undefined,
+    currentBanner || undefined
+  );
+  return redirect(`/projects/${params.projectId}`);
 }
 
 export default function EditProject() {
   const {project} = useLoaderData<typeof loader>();
   const actionData = useActionData<typeof action>();
+  const [banner, setBanner] = useState<string | undefined>(
+    project.banner || undefined
+  );
 
   return (
     <Layout>
@@ -80,6 +98,19 @@ export default function EditProject() {
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
             />
           </div>
+
+          <BannerUpload
+            currentBanner={banner}
+            onBannerChange={setBanner}
+            cleanupPrevious={true}
+          />
+
+          <input type="hidden" name="banner" value={banner || ""} />
+          <input
+            type="hidden"
+            name="currentBanner"
+            value={project.banner || ""}
+          />
 
           <div className="flex justify-end gap-4">
             <a

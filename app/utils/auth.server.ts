@@ -181,3 +181,23 @@ export async function deleteUser(userId: string) {
     where: {id: userId},
   });
 }
+
+// Helper function to check if user is admin
+export function isAdmin(user: {privilages: string[]} | null): boolean {
+  return user?.privilages?.includes("admin") || false;
+}
+
+// Require admin access - throws error if not admin
+export async function requireAdmin(request: Request) {
+  const user = await getUser(request);
+
+  if (!user) {
+    throw redirect("/login");
+  }
+
+  if (!isAdmin(user)) {
+    throw new Response("Forbidden: Admin access required", {status: 403});
+  }
+
+  return user;
+}

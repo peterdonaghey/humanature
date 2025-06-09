@@ -2,12 +2,14 @@ import {json, unstable_parseMultipartFormData} from "@remix-run/node";
 import type {ActionFunctionArgs} from "@remix-run/node";
 import {uploadStreamToS3} from "~/utils/aws.server";
 import db from "~/utils/db.server";
+import {requireAdmin} from "~/utils/auth.server";
 
 export async function action({request, params}: ActionFunctionArgs) {
+  await requireAdmin(request);
   try {
     let fileName = "";
-    let fileSize = 0;
-    let fileType = "";
+    const fileSize = 0;
+    const fileType = "";
     let fileUrl = "";
 
     const formData = await unstable_parseMultipartFormData(

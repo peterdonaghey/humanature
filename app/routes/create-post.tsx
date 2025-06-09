@@ -12,6 +12,7 @@ import {Editor} from "~/components/RichTextEditor";
 import {useState} from "react";
 import {getProjects} from "~/utils/projects.server";
 import {Project} from "@prisma/client";
+import {requireAdmin} from "~/utils/auth.server";
 
 type ActionData = {
   error?: string;
@@ -21,12 +22,15 @@ type LoaderData = {
   projects: Project[];
 };
 
-export const loader: LoaderFunction = async () => {
+export const loader: LoaderFunction = async ({request}) => {
+  await requireAdmin(request);
   const projects = await getProjects();
   return json({projects});
 };
 
 export const action: ActionFunction = async ({request}) => {
+  await requireAdmin(request);
+
   const formData = await request.formData();
   const title = formData.get("title");
   const content = formData.get("content");
