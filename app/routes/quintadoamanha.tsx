@@ -20,6 +20,12 @@ export default function Index() {
           width="90%"
           height="800"
         ></iframe>
+        <div className="text-center mt-4 mb-8">
+          <p className="text-sm text-gray-600">
+            Calendar ID:
+            c76797a0bd842747eb7dfa50aa9302a7f3d6374b4e887609a5b3c7718988ffde@group.calendar.google.com
+          </p>
+        </div>
         <div className="flex flex-col md:flex-row justify-center items-start space-x-8 w-full mt-10 ">
           <div id="esh" className="text-left w-full md:w-1/2 text-lg mx-8">
             <h2 className="text-2xl font-semibold mb-4 text-center">
