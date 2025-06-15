@@ -1,17 +1,15 @@
 import {RichTextEditor, Link} from "@mantine/tiptap";
 import {useEditor} from "@tiptap/react";
-import Highlight from "@tiptap/extension-highlight";
-import StarterKit from "@tiptap/starter-kit";
-import Underline from "@tiptap/extension-underline";
-import TextAlign from "@tiptap/extension-text-align";
-import Superscript from "@tiptap/extension-superscript";
+import {Highlight} from "@tiptap/extension-highlight";
+import {StarterKit} from "@tiptap/starter-kit";
+import {Underline} from "@tiptap/extension-underline";
+import {TextAlign} from "@tiptap/extension-text-align";
+import {Superscript} from "@tiptap/extension-superscript";
 import SubScript from "@tiptap/extension-subscript";
 import {Color} from "@tiptap/extension-color";
-import TextStyle from "@tiptap/extension-text-style";
+import {TextStyle} from "@tiptap/extension-text-style";
 import ImageResize from "tiptap-extension-resize-image";
 import {useState} from "react";
-
-const content = "<p>Your content here</p>";
 
 export function Editor({
   content,
