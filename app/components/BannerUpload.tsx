@@ -122,7 +122,7 @@ export function BannerUpload({
         </div>
       )}
 
-      <div className="flex items-center space-x-4">
+      <div className="flex items-center">
         <input
           type="file"
           id="banner-upload"
@@ -188,7 +188,7 @@ export function BannerUpload({
             type="button"
             onClick={handleRemoveBanner}
             disabled={disabled}
-            className="text-red-600 hover:text-red-700 text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+            className="text-red-600 ml-4 hover:text-red-700 text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Remove Banner
           </button>

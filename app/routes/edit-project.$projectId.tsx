@@ -4,8 +4,17 @@ import {
   type ActionFunctionArgs,
   type LoaderFunctionArgs,
 } from "@remix-run/node";
-import {Form, useActionData, useLoaderData} from "@remix-run/react";
-import {getProject, updateProject} from "~/utils/projects.server";
+import {
+  Form,
+  useActionData,
+  useLoaderData,
+  useNavigation,
+} from "@remix-run/react";
+import {
+  getProject,
+  updateProject,
+  deleteProject,
+} from "~/utils/projects.server";
 import {Layout} from "../components/Layout";
 import {BannerUpload} from "~/components/BannerUpload";
 import {useState} from "react";
@@ -25,6 +34,17 @@ export async function action({request, params}: ActionFunctionArgs) {
   await requireAdmin(request);
 
   const formData = await request.formData();
+  const intent = formData.get("intent");
+
+  if (intent === "delete") {
+    const result = await deleteProject(params.projectId as string);
+    if (!result.success) {
+      return json({error: result.error}, {status: 500});
+    }
+    return redirect("/projects");
+  }
+
+  // Default action is update
   const name = formData.get("name") as string;
   const description = formData.get("description") as string;
   const banner = formData.get("banner") as string;
@@ -47,6 +67,10 @@ export async function action({request, params}: ActionFunctionArgs) {
 export default function EditProject() {
   const {project} = useLoaderData<typeof loader>();
   const actionData = useActionData<typeof action>();
+  const navigation = useNavigation();
+  const isDeleting =
+    navigation.state === "submitting" &&
+    navigation.formData?.get("intent") === "delete";
   const [banner, setBanner] = useState<string | undefined>(
     project.banner || undefined
   );
@@ -58,13 +82,13 @@ export default function EditProject() {
           Edit Project
         </h1>
 
-        <Form method="post" className="space-y-6">
-          {actionData?.error && (
-            <div className="bg-red-50 text-red-600 p-4 rounded-lg">
-              {actionData.error}
-            </div>
-          )}
+        {actionData?.error && (
+          <div className="bg-red-50 text-red-600 p-4 rounded-lg mb-6">
+            {actionData.error}
+          </div>
+        )}
 
+        <Form method="post" className="space-y-6">
           <div>
             <label
               htmlFor="name"
@@ -127,6 +151,33 @@ export default function EditProject() {
             </button>
           </div>
         </Form>
+
+        <div className="mt-8 pt-8 border-t border-gray-200">
+          <h2 className="text-lg font-medium text-gray-900 mb-4">
+            Danger Zone
+          </h2>
+          <Form method="post">
+            <input type="hidden" name="intent" value="delete" />
+            <button
+              type="submit"
+              className={`bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-lg transition-colors ${
+                isDeleting ? "opacity-50" : ""
+              }`}
+              disabled={isDeleting}
+              onClick={(e) => {
+                if (
+                  !confirm(
+                    `Are you sure you want to delete "${project.name}"? This will permanently delete the project and all its posts and documents. This action cannot be undone.`
+                  )
+                ) {
+                  e.preventDefault();
+                }
+              }}
+            >
+              {isDeleting ? "Deleting..." : "Delete Project"}
+            </button>
+          </Form>
+        </div>
       </div>
     </Layout>
   );

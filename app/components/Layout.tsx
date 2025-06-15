@@ -13,7 +13,7 @@ export const Layout = ({children}: {children: React.ReactNode}) => {
           />
           <NavBar />
         </div>
-        {children}
+        <div>{children}</div>
       </div>
       <Footer />
     </main>

@@ -30,7 +30,7 @@ export function ProjectBanner({
       <img
         src={banner}
         alt={`${projectName} banner`}
-        className="w-full max-h-96 object-contain bg-gray-50"
+        className="w-full max-h-96 object-contain"
       />
     </div>
   );

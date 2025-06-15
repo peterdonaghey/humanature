@@ -67,16 +67,52 @@ export async function updateProject(
 
 export async function deleteProject(id: string) {
   try {
-    // First get the project to check if it has a banner
+    // First get the project with all related data
     const project = await getProject(id);
 
-    // Delete the project from database
+    if (!project) {
+      return {success: false, error: "Project not found"};
+    }
+
+    // Delete all documents and their S3 files
+    for (const document of project.documents) {
+      try {
+        await deleteFromS3(document.url);
+        console.log(`Successfully deleted document from S3: ${document.url}`);
+      } catch (error) {
+        console.error(
+          `Failed to delete document from S3: ${document.url}`,
+          error
+        );
+        // Continue with other deletions even if one fails
+      }
+    }
+
+    // Delete all posts and their banners from S3
+    for (const post of project.posts) {
+      if (post.banner) {
+        try {
+          await deleteFromS3(post.banner);
+          console.log(
+            `Successfully deleted post banner from S3: ${post.banner}`
+          );
+        } catch (error) {
+          console.error(
+            `Failed to delete post banner from S3: ${post.banner}`,
+            error
+          );
+          // Continue with other deletions even if one fails
+        }
+      }
+    }
+
+    // Delete the project from database (this will cascade delete posts and documents due to foreign key constraints)
     await db.project.delete({
       where: {id},
     });
 
     // If project had a banner, delete it from S3
-    if (project?.banner) {
+    if (project.banner) {
       try {
         await deleteFromS3(project.banner);
         console.log(
