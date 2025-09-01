@@ -15,9 +15,9 @@ export type NavigationOption = {
 
 export const navigationOptionGroups: NavigationOption[] = [
   {
-    to: "/quintadoamanha",
-    ptText: "quinta do amanhã",
-    enText: "quinta do amanhã",
+    to: "/calendar",
+    ptText: "calendário",
+    enText: "calendar",
     bgColor: "bg-amber-700",
   },
   {

@@ -5,12 +5,6 @@ export default function Index() {
     <Layout>
       <div className="flex flex-col justify-center items-center mb-16">
         <div className="text-center items-center w-full pt-8">
-          {/* <h1 className="text-4xl font-bold">Quinta do Amanhã</h1> */}
-          <img
-            src="/quinta-logo.png"
-            alt="Quinta do Amanhã Logo"
-            className="mx-auto mb-4 w-48"
-          />
           <p className="text-lg">Calendar</p>
         </div>
         <iframe

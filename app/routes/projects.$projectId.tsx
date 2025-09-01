@@ -374,14 +374,53 @@ export default function ProjectDetails() {
               {project.posts.map((post) => (
                 <div
                   key={post.id}
-                  className="bg-white rounded-lg shadow-md p-6 border border-emerald-100"
+                  className="bg-white rounded-lg shadow-md p-6 border border-emerald-100 hover:shadow-lg transition-shadow group"
                 >
                   <div className="flex justify-between items-start mb-4">
-                    <h3 className="text-xl font-semibold text-emerald-800">
-                      {post.title}
-                    </h3>
+                    <Link
+                      to={`/post/${post.id}`}
+                      className="flex-1 group-hover:text-emerald-700 transition-colors"
+                    >
+                      <h3 className="text-xl font-semibold text-emerald-800 mb-2">
+                        {post.title}
+                      </h3>
+                      <div className="text-sm text-gray-500 mb-3">
+                        Created {formatDate(post.createdAt)}
+                      </div>
+
+                      {post.pdfUrl && (
+                        <div className="mb-3 flex items-center gap-2 text-sm text-emerald-600">
+                          <span>📄</span>
+                          <span>PDF Article</span>
+                        </div>
+                      )}
+
+                      <div className="text-gray-700">
+                        {post.content ? (
+                          <p className="line-clamp-2">
+                            {post.content
+                              .replace(/<[^>]*>/g, "")
+                              .substring(0, 150)}
+                            ...
+                          </p>
+                        ) : post.pdfUrl ? (
+                          <p className="text-gray-500 italic">
+                            PDF-based article - click to read
+                          </p>
+                        ) : (
+                          <p className="text-gray-500 italic">
+                            No content available
+                          </p>
+                        )}
+                      </div>
+
+                      <div className="mt-3 text-emerald-600 font-medium">
+                        Read full article →
+                      </div>
+                    </Link>
+
                     {userIsAdmin && (
-                      <div className="flex space-x-2">
+                      <div className="flex space-x-2 opacity-0 group-hover:opacity-100 transition-opacity">
                         <Link
                           to={`/edit-post/${post.id}`}
                           className="text-emerald-600 hover:text-emerald-700 text-sm"
@@ -416,13 +455,6 @@ export default function ProjectDetails() {
                         </Form>
                       </div>
                     )}
-                  </div>
-                  <div
-                    className="prose prose-emerald max-w-none"
-                    dangerouslySetInnerHTML={{__html: post.content}}
-                  />
-                  <div className="mt-4 text-sm text-gray-500">
-                    Created {formatDate(post.createdAt)}
                   </div>
                 </div>
               ))}

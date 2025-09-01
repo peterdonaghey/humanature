@@ -68,34 +68,76 @@ export default function Posts() {
               >
                 <article className="bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow relative group">
                   <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <Form method="post" className="inline">
-                      <input type="hidden" name="postId" value={post.id} />
-                      <button
-                        type="submit"
-                        disabled={isDeleting}
-                        className="text-red-500 hover:text-red-700 transition-colors"
-                        onClick={(e) => {
-                          if (
-                            !confirm(
-                              "Are you sure you want to delete this post?"
-                            )
-                          ) {
-                            e.preventDefault();
-                          }
-                        }}
+                    <div className="flex gap-2">
+                      <Link
+                        to={`/edit-post/${post.id}`}
+                        className="text-emerald-600 hover:text-emerald-800 transition-colors"
                       >
-                        {isDeleting ? "Deleting..." : "Delete"}
-                      </button>
-                    </Form>
+                        Edit
+                      </Link>
+                      <Form method="post" className="inline">
+                        <input type="hidden" name="postId" value={post.id} />
+                        <button
+                          type="submit"
+                          disabled={isDeleting}
+                          className="text-red-500 hover:text-red-700 transition-colors"
+                          onClick={(e) => {
+                            if (
+                              !confirm(
+                                "Are you sure you want to delete this post?"
+                              )
+                            ) {
+                              e.preventDefault();
+                            }
+                          }}
+                        >
+                          {isDeleting ? "Deleting..." : "Delete"}
+                        </button>
+                      </Form>
+                    </div>
                   </div>
-                  <h2 className="text-2xl font-semibold mb-2">{post.title}</h2>
-                  <p className="text-gray-600 mb-4">
-                    {formatDateShort(post.createdAt)}
-                  </p>
-                  <div
-                    className="prose prose-sm sm:prose lg:prose-lg max-w-none prose-colors"
-                    dangerouslySetInnerHTML={{__html: post.content}}
-                  />
+
+                  <Link
+                    to={`/post/${post.id}`}
+                    className="block group-hover:text-emerald-700 transition-colors"
+                  >
+                    <h2 className="text-2xl font-semibold mb-2">
+                      {post.title}
+                    </h2>
+                    <p className="text-gray-600 mb-4">
+                      {formatDateShort(post.createdAt)}
+                    </p>
+
+                    {post.pdfUrl && (
+                      <div className="mb-3 flex items-center gap-2 text-sm text-emerald-600">
+                        <span>📄</span>
+                        <span>PDF Article</span>
+                      </div>
+                    )}
+
+                    <div className="text-gray-700">
+                      {post.content ? (
+                        <p className="line-clamp-3">
+                          {post.content
+                            .replace(/<[^>]*>/g, "")
+                            .substring(0, 200)}
+                          ...
+                        </p>
+                      ) : post.pdfUrl ? (
+                        <p className="text-gray-500 italic">
+                          Click to view PDF-based article
+                        </p>
+                      ) : (
+                        <p className="text-gray-500 italic">
+                          No content available
+                        </p>
+                      )}
+                    </div>
+
+                    <div className="mt-4 text-emerald-600 font-medium">
+                      Read more →
+                    </div>
+                  </Link>
                 </article>
               </div>
             ))

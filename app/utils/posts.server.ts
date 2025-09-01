@@ -3,12 +3,14 @@ import db from "./db.server";
 export async function createPost(
   title: string,
   content: string,
-  projectId: string
+  projectId: string,
+  pdfUrl?: string | null
 ) {
   return db.post.create({
     data: {
       title,
       content,
+      pdfUrl,
       project: {
         connect: {
           id: projectId,
