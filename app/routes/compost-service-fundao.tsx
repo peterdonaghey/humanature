@@ -184,26 +184,6 @@ export default function CompostServiceFundao() {
     },
   };
 
-  const locationSection = {
-    ptText: {
-      title: "Onde Nos Encontrar",
-      address: "Shuk, Fundão",
-      directions:
-        "Estamos localizados no centro do Fundão, perto do Mercado Municipal no restaurante Shuk. Procure os móveis de madeira na parte externa do restaurante.",
-      openingHours:
-        "Aberto todos os dias a qualquer hora. Ponto de recolha no exterior",
-      note: "Observe que o estacionamento onde o Shuk estava localizado anteriormente está em reforma. Ele foi movido para cima das escadas sob o abrigo do edifício Capgemini.",
-    },
-    enText: {
-      title: "Where to Find Us",
-      address: "Shuk, Fundão",
-      directions:
-        "We are located in the center of Fundão, near the Municipal Market at the restaurant Shuk. Look for the wooden furniture outside the restaurant.",
-      openingHours: "Opening hours: 24/7 as it is outside",
-      note: "Note the car park where Shuk was previously located is being renovated. It has moved up the steps under the shelter of the Capgemini building.",
-    },
-  };
-
   return (
     <Layout>
       <div className="max-w-4xl mx-auto px-4 py-8">
