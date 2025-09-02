@@ -108,10 +108,10 @@ export default function Posts() {
                       {formatDateShort(post.createdAt)}
                     </p>
 
-                    {post.pdfUrl && (
+                    {post.documentUrl && (
                       <div className="mb-3 flex items-center gap-2 text-sm text-emerald-600">
                         <span>📄</span>
-                        <span>PDF Article</span>
+                        <span>Document Article</span>
                       </div>
                     )}
 
@@ -123,9 +123,9 @@ export default function Posts() {
                             .substring(0, 200)}
                           ...
                         </p>
-                      ) : post.pdfUrl ? (
+                      ) : post.documentUrl ? (
                         <p className="text-gray-500 italic">
-                          Click to view PDF-based article
+                          Click to view document-based article
                         </p>
                       ) : (
                         <p className="text-gray-500 italic">

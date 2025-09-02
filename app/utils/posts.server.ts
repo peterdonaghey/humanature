@@ -4,13 +4,13 @@ export async function createPost(
   title: string,
   content: string,
   projectId: string,
-  pdfUrl?: string | null
+  documentUrl?: string | null
 ) {
   return db.post.create({
     data: {
       title,
       content,
-      pdfUrl,
+      documentUrl,
       project: {
         connect: {
           id: projectId,

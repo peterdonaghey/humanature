@@ -67,16 +67,16 @@ type Resource {
 }
 
 model Post {
-  id        String     @id @default(auto()) @map("_id") @db.ObjectId
-  title     String
-  content   String
-  pdfUrl    String? // Optional PDF URL for article content
-  author    User?      @relation(fields: [authorId], references: [id])
-  authorId  String?    @db.ObjectId
-  resources Resource[]
-  banner    String?
-  project   Project?   @relation(fields: [projectId], references: [id])
-  projectId String?    @db.ObjectId
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
+  id          String     @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  content     String
+  documentUrl String? // Optional document URL for article content (.docx, .pdf, etc.)
+  author      User?      @relation(fields: [authorId], references: [id])
+  authorId    String?    @db.ObjectId
+  resources   Resource[]
+  banner      String?
+  project     Project?   @relation(fields: [projectId], references: [id])
+  projectId   String?    @db.ObjectId
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
 }

@@ -367,54 +367,6 @@ export default function CompostServiceFundao() {
           </div>
         </div>
 
-        {/* Location Section */}
-        <div className="bg-green-50 rounded-lg p-8 mb-16">
-          <h2 className="text-2xl font-semibold mb-6">
-            {language === "pt"
-              ? locationSection.ptText.title
-              : locationSection.enText.title}
-          </h2>
-
-          <div className="space-y-4">
-            <p className="font-semibold">
-              {language === "pt"
-                ? locationSection.ptText.address
-                : locationSection.enText.address}
-            </p>
-            <p>
-              {language === "pt"
-                ? locationSection.ptText.directions
-                : locationSection.enText.directions}
-            </p>
-            <p>
-              {language === "pt"
-                ? locationSection.ptText.note
-                : locationSection.enText.note}
-            </p>
-            <p className="text-gray-700">
-              {language === "pt"
-                ? locationSection.ptText.openingHours
-                : locationSection.enText.openingHours}
-            </p>
-          </div>
-          <div className="flex flex-row items-center justify-center gap-4">
-            <iframe
-              title="Mapa do Fundão"
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d743.809761257213!2d-7.502693479374588!3d40.13715521402539!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd3d3f504978fad5%3A0xa2b436dc32bf9ee0!2sShuk%20middle%20eastern%20cuisine!5e1!3m2!1sen!2spt!4v1740388326812!5m2!1sen!2spt"
-              width="50%"
-              height="300"
-              style={{border: 0}}
-              allowFullScreen
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-            ></iframe>
-            <img
-              src="/compost-ponto-de-recolha.jpg"
-              alt="Ponto de recolha"
-              width="50%"
-            />
-          </div>
-        </div>
         {/* Quinta do Amanhã Details */}
         <div className="bg-green-50 rounded-lg p-8 mb-16">
           <h2 className="text-2xl font-semibold mb-4">

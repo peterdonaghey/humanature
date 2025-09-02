@@ -40,7 +40,7 @@ export async function action({request, params}: ActionFunctionArgs) {
   const title = formData.get("title");
   const content = formData.get("content");
   const projectId = formData.get("projectId");
-  const pdfUrl = formData.get("pdfUrl");
+  const documentUrl = formData.get("documentUrl");
 
   if (!title || !projectId) {
     return json({error: "Title and project are required"}, {status: 400});
@@ -55,8 +55,8 @@ export async function action({request, params}: ActionFunctionArgs) {
     return json({error: "Invalid content"}, {status: 400});
   }
 
-  if (pdfUrl && typeof pdfUrl !== "string") {
-    return json({error: "Invalid PDF URL"}, {status: 400});
+  if (documentUrl && typeof documentUrl !== "string") {
+    return json({error: "Invalid document URL"}, {status: 400});
   }
 
   await db.post.update({
@@ -64,7 +64,7 @@ export async function action({request, params}: ActionFunctionArgs) {
     data: {
       title,
       content: content || "",
-      pdfUrl: pdfUrl || null,
+      documentUrl: documentUrl || null,
       project: {
         connect: {id: projectId},
       },
@@ -80,21 +80,24 @@ export default function EditPost() {
   const navigation = useNavigation();
   const isSubmitting = navigation.state === "submitting";
   const [content, setContent] = useState(post.content);
-  const [pdfUploading, setPdfUploading] = useState(false);
-  const [pdfUrl, setPdfUrl] = useState(post.pdfUrl || "");
+  const [documentUploading, setDocumentUploading] = useState(false);
+  const [documentUrl, setDocumentUrl] = useState(post.documentUrl || "");
 
-  const handlePdfUpload = async (
+  const handleDocumentUpload = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     const file = event.target.files?.[0];
     if (!file) return;
 
-    if (file.type !== "application/pdf") {
-      alert("Please select a PDF file");
+    if (
+      file.type !==
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+    ) {
+      alert("Please select a Word document (.docx file)");
       return;
     }
 
-    setPdfUploading(true);
+    setDocumentUploading(true);
     const formData = new FormData();
     formData.append("file", file);
 
@@ -106,14 +109,14 @@ export default function EditPost() {
 
       if (response.ok) {
         const result = await response.json();
-        setPdfUrl(result.url);
+        setDocumentUrl(result.url);
       } else {
-        alert("Error uploading PDF");
+        alert("Error uploading document");
       }
     } catch (error) {
-      alert("Error uploading PDF");
+      alert("Error uploading document");
     } finally {
-      setPdfUploading(false);
+      setDocumentUploading(false);
     }
   };
 
@@ -160,43 +163,48 @@ export default function EditPost() {
             />
           </div>
 
-          {/* PDF Upload Section */}
+          {/* Document Upload Section */}
           <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 bg-gray-50">
-            <h3 className="text-lg font-medium mb-4">📄 PDF Article Content</h3>
+            <h3 className="text-lg font-medium mb-4">
+              📄 Word Document Content
+            </h3>
             <p className="text-sm text-gray-600 mb-4">
-              Upload a PDF to automatically convert it to web article format, or
-              use the rich text editor below.
+              Upload a Word document (.docx) to automatically convert it to web
+              article format with images and formatting preserved, or use the
+              rich text editor below.
             </p>
 
             <div className="space-y-4">
               <input
                 type="file"
-                accept=".pdf"
-                onChange={handlePdfUpload}
-                disabled={pdfUploading}
+                accept=".docx"
+                onChange={handleDocumentUpload}
+                disabled={documentUploading}
                 className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
               />
 
-              {pdfUploading && (
-                <div className="text-sm text-emerald-600">Uploading PDF...</div>
+              {documentUploading && (
+                <div className="text-sm text-emerald-600">
+                  Uploading document...
+                </div>
               )}
 
-              {pdfUrl && (
+              {documentUrl && (
                 <div className="p-3 bg-emerald-50 border border-emerald-200 rounded-lg">
                   <div className="text-sm text-emerald-800 mb-1">
-                    ✅ PDF uploaded successfully!
+                    ✅ Word document uploaded successfully!
                   </div>
                   <a
-                    href={pdfUrl}
+                    href={documentUrl}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-emerald-600 hover:text-emerald-800 text-sm"
                   >
-                    View PDF ↗
+                    View document ↗
                   </a>
                   <button
                     type="button"
-                    onClick={() => setPdfUrl("")}
+                    onClick={() => setDocumentUrl("")}
                     className="ml-4 text-red-600 hover:text-red-800 text-sm"
                   >
                     Remove
@@ -205,13 +213,13 @@ export default function EditPost() {
               )}
             </div>
 
-            <input type="hidden" name="pdfUrl" value={pdfUrl} />
+            <input type="hidden" name="documentUrl" value={documentUrl} />
           </div>
 
-          {/* Rich Text Editor - Optional if no PDF */}
+          {/* Rich Text Editor - Optional if no document */}
           <div className="prose w-full">
             <label htmlFor="content" className="block text-sm font-medium mb-2">
-              Rich Text Content (Optional - used if no PDF provided)
+              Rich Text Content (Optional - used if no document provided)
             </label>
             <input type="hidden" name="content" value={content} />
             <Editor content={content} onChange={setContent} />

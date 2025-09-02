@@ -388,10 +388,10 @@ export default function ProjectDetails() {
                         Created {formatDate(post.createdAt)}
                       </div>
 
-                      {post.pdfUrl && (
+                      {post.documentUrl && (
                         <div className="mb-3 flex items-center gap-2 text-sm text-emerald-600">
                           <span>📄</span>
-                          <span>PDF Article</span>
+                          <span>Document Article</span>
                         </div>
                       )}
 
@@ -403,9 +403,9 @@ export default function ProjectDetails() {
                               .substring(0, 150)}
                             ...
                           </p>
-                        ) : post.pdfUrl ? (
+                        ) : post.documentUrl ? (
                           <p className="text-gray-500 italic">
-                            PDF-based article - click to read
+                            Document-based article - click to read
                           </p>
                         ) : (
                           <p className="text-gray-500 italic">

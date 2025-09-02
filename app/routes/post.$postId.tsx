@@ -20,14 +20,14 @@ export async function loader({params}: LoaderFunctionArgs) {
 
   let htmlContent = post.content;
 
-  // If there's a PDF URL, convert it to HTML
-  if (post.pdfUrl) {
+  // If there's a document URL, convert it to HTML
+  if (post.documentUrl) {
     try {
-      htmlContent = await convertPdfToHtml(post.pdfUrl);
+      htmlContent = await convertPdfToHtml(post.documentUrl);
     } catch (error) {
-      console.error("Error converting PDF:", error);
-      // Fallback to regular content if PDF conversion fails
-      htmlContent = post.content || "<p>Unable to load PDF content.</p>";
+      console.error("Error converting document:", error);
+      // Fallback to regular content if document conversion fails
+      htmlContent = post.content || "<p>Unable to load document content.</p>";
     }
   }
 
@@ -82,18 +82,18 @@ export default function PostView() {
 
         {/* Article Content */}
         <div className="prose prose-lg max-w-none">
-          {post.pdfUrl && (
+          {post.documentUrl && (
             <div className="mb-8 p-4 bg-emerald-50 rounded-lg border border-emerald-200">
               <p className="text-sm text-emerald-800 mb-2">
-                📄 This article was generated from a PDF document
+                📄 This article was generated from a document
               </p>
               <a
-                href={post.pdfUrl}
+                href={post.documentUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-emerald-600 hover:text-emerald-800 text-sm font-medium"
               >
-                View original PDF ↗
+                View original document ↗
               </a>
             </div>
           )}
