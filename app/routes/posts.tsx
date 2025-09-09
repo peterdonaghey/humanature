@@ -1,4 +1,4 @@
-import {json, LoaderFunction, ActionFunction, redirect} from "@remix-run/node";
+import {json, LoaderFunction, ActionFunction} from "@remix-run/node";
 import {useLoaderData, Link, Form, useNavigation} from "@remix-run/react";
 import {Layout} from "../components/Layout";
 import {getPosts, deletePost} from "~/utils/posts.server";
@@ -8,6 +8,7 @@ import {formatDateShort} from "~/utils/date";
 
 type LoaderData = {
   posts: Post[];
+  isAdmin: boolean;
 };
 
 export const action: ActionFunction = async ({request}) => {
@@ -30,17 +31,17 @@ export const action: ActionFunction = async ({request}) => {
 
 export const loader: LoaderFunction = async ({request}) => {
   const user = await getUser(request);
-  if (!user?.privilages.includes("admin")) {
-    return redirect("/");
-  }
+  const isAdmin = user?.privilages.includes("admin");
   const posts = await getPosts();
-  return json({posts});
+  return json({posts, isAdmin});
 };
 
 export default function Posts() {
-  const {posts} = useLoaderData<LoaderData>();
+  const {posts, isAdmin} = useLoaderData<LoaderData>();
   const navigation = useNavigation();
   const isDeleting = navigation.state === "submitting";
+
+  console.log("isAdmin", isAdmin);
 
   return (
     <Layout>
@@ -68,33 +69,35 @@ export default function Posts() {
               >
                 <article className="bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow relative group">
                   <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <div className="flex gap-2">
-                      <Link
-                        to={`/edit-post/${post.id}`}
-                        className="text-emerald-600 hover:text-emerald-800 transition-colors"
-                      >
-                        Edit
-                      </Link>
-                      <Form method="post" className="inline">
-                        <input type="hidden" name="postId" value={post.id} />
-                        <button
-                          type="submit"
-                          disabled={isDeleting}
-                          className="text-red-500 hover:text-red-700 transition-colors"
-                          onClick={(e) => {
-                            if (
-                              !confirm(
-                                "Are you sure you want to delete this post?"
-                              )
-                            ) {
-                              e.preventDefault();
-                            }
-                          }}
+                    {isAdmin && (
+                      <div className="flex gap-2">
+                        <Link
+                          to={`/edit-post/${post.id}`}
+                          className="text-emerald-600 hover:text-emerald-800 transition-colors"
                         >
-                          {isDeleting ? "Deleting..." : "Delete"}
-                        </button>
-                      </Form>
-                    </div>
+                          Edit
+                        </Link>
+                        <Form method="post" className="inline">
+                          <input type="hidden" name="postId" value={post.id} />
+                          <button
+                            type="submit"
+                            disabled={isDeleting}
+                            className="text-red-500 hover:text-red-700 transition-colors"
+                            onClick={(e) => {
+                              if (
+                                !confirm(
+                                  "Are you sure you want to delete this post?"
+                                )
+                              ) {
+                                e.preventDefault();
+                              }
+                            }}
+                          >
+                            {isDeleting ? "Deleting..." : "Delete"}
+                          </button>
+                        </Form>
+                      </div>
+                    )}
                   </div>
 
                   <Link

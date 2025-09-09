@@ -41,11 +41,17 @@ export const navigationOptionGroups: NavigationOption[] = [
     ],
   },
   {
+    to: "/posts",
+    ptText: "posts",
+    enText: "posts",
+    bgColor: "bg-sky-600",
+  },
+  {
     to: "/projects",
     allowedRoles: ["admin"],
     ptText: "projetos",
     enText: "projects",
-    bgColor: "bg-sky-600",
+    bgColor: "bg-yellow-500",
   },
   {
     to: "/users",
