@@ -22,7 +22,16 @@ export async function loader({params, request}: LoaderFunctionArgs) {
 
   const post = await db.post.findUnique({
     where: {id: params.postId},
-    include: {project: true},
+    include: {
+      project: true,
+      author: {
+        select: {
+          id: true,
+          username: true,
+          name: true,
+        },
+      },
+    },
   });
 
   if (!post) {
@@ -30,16 +39,30 @@ export async function loader({params, request}: LoaderFunctionArgs) {
   }
 
   const projects = await getProjects();
-  return json({post, projects});
+
+  // Get all users for the author dropdown
+  const users = await db.user.findMany({
+    select: {
+      id: true,
+      username: true,
+      name: true,
+    },
+    orderBy: {
+      name: "asc",
+    },
+  });
+
+  return json({post, projects, users});
 }
 
 export async function action({request, params}: ActionFunctionArgs) {
-  const user = await requireAdmin(request);
+  await requireAdmin(request);
 
   const formData = await request.formData();
   const title = formData.get("title");
   const content = formData.get("content");
   const projectId = formData.get("projectId");
+  const authorId = formData.get("authorId");
   const documentUrl = formData.get("documentUrl");
 
   if (!title || !projectId) {
@@ -55,30 +78,52 @@ export async function action({request, params}: ActionFunctionArgs) {
     return json({error: "Invalid content"}, {status: 400});
   }
 
+  if (authorId && typeof authorId !== "string") {
+    return json({error: "Invalid author selection"}, {status: 400});
+  }
+
   if (documentUrl && typeof documentUrl !== "string") {
     return json({error: "Invalid document URL"}, {status: 400});
   }
 
+  // Prepare update data
+  const updateData: {
+    title: string;
+    content: string;
+    documentUrl: string | null;
+    project: {connect: {id: string}};
+    author?: {connect: {id: string}} | {disconnect: true};
+  } = {
+    title,
+    content: content || "",
+    documentUrl: documentUrl || null,
+    project: {
+      connect: {id: projectId},
+    },
+  };
+
+  // Only update author if one is selected
+  if (authorId) {
+    updateData.author = {
+      connect: {id: authorId},
+    };
+  } else {
+    // If no author selected, disconnect the author
+    updateData.author = {
+      disconnect: true,
+    };
+  }
+
   await db.post.update({
     where: {id: params.postId},
-    data: {
-      title,
-      content: content || "",
-      documentUrl: documentUrl || null,
-      project: {
-        connect: {id: projectId},
-      },
-      author: {
-        connect: {id: user.id}, // Assign current user as author when editing
-      },
-    },
+    data: updateData,
   });
 
   return redirect(`/post/${params.postId}`);
 }
 
 export default function EditPost() {
-  const {post, projects} = useLoaderData<typeof loader>();
+  const {post, projects, users} = useLoaderData<typeof loader>();
   const actionData = useActionData<typeof action>();
   const navigation = useNavigation();
   const isSubmitting = navigation.state === "submitting";
@@ -147,6 +192,28 @@ export default function EditPost() {
               {projects.map((project) => (
                 <option key={project.id} value={project.id}>
                   {project.name}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div>
+            <label
+              htmlFor="authorId"
+              className="block text-sm font-medium mb-2"
+            >
+              Author
+            </label>
+            <select
+              id="authorId"
+              name="authorId"
+              defaultValue={post.author?.id || ""}
+              className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+            >
+              <option value="">No author assigned</option>
+              {users.map((user) => (
+                <option key={user.id} value={user.id}>
+                  {user.name || user.username}
                 </option>
               ))}
             </select>

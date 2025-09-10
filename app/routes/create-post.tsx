@@ -13,6 +13,7 @@ import {useState} from "react";
 import {getProjects} from "~/utils/projects.server";
 import {Project} from "@prisma/client";
 import {requireAdmin} from "~/utils/auth.server";
+import db from "~/utils/db.server";
 
 type ActionData = {
   error?: string;
@@ -20,21 +21,36 @@ type ActionData = {
 
 type LoaderData = {
   projects: Project[];
+  users: {id: string; username: string; name: string | null}[];
 };
 
 export const loader: LoaderFunction = async ({request}) => {
   await requireAdmin(request);
   const projects = await getProjects();
-  return json({projects});
+
+  // Get all users for the author dropdown
+  const users = await db.user.findMany({
+    select: {
+      id: true,
+      username: true,
+      name: true,
+    },
+    orderBy: {
+      name: "asc",
+    },
+  });
+
+  return json({projects, users});
 };
 
 export const action: ActionFunction = async ({request}) => {
-  const user = await requireAdmin(request);
+  const currentUser = await requireAdmin(request);
 
   const formData = await request.formData();
   const title = formData.get("title");
   const content = formData.get("content");
   const projectId = formData.get("projectId");
+  const authorId = formData.get("authorId");
   const documentUrl = formData.get("documentUrl");
 
   if (!title || !projectId) {
@@ -50,22 +66,29 @@ export const action: ActionFunction = async ({request}) => {
     return json({error: "Invalid content"}, {status: 400});
   }
 
+  if (authorId && typeof authorId !== "string") {
+    return json({error: "Invalid author selection"}, {status: 400});
+  }
+
   if (documentUrl && typeof documentUrl !== "string") {
     return json({error: "Invalid document URL"}, {status: 400});
   }
+
+  // Use selected author or fallback to current user
+  const finalAuthorId = authorId || currentUser.id;
 
   const post = await createPost(
     title,
     content || "",
     projectId,
-    user.id, // Pass the current user's ID as the author
+    finalAuthorId,
     documentUrl || null
   );
   return redirect(`/post/${post.id}`);
 };
 
 export default function CreatePost() {
-  const {projects} = useLoaderData<LoaderData>();
+  const {projects, users} = useLoaderData<LoaderData>();
   const actionData = useActionData<ActionData>();
   const navigation = useNavigation();
   const isSubmitting = navigation.state === "submitting";
@@ -133,6 +156,27 @@ export default function CreatePost() {
               {projects.map((project) => (
                 <option key={project.id} value={project.id}>
                   {project.name}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div>
+            <label
+              htmlFor="authorId"
+              className="block text-sm font-medium mb-2"
+            >
+              Author
+            </label>
+            <select
+              id="authorId"
+              name="authorId"
+              className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+            >
+              <option value="">Select an author (optional)</option>
+              {users.map((user) => (
+                <option key={user.id} value={user.id}>
+                  {user.name || user.username}
                 </option>
               ))}
             </select>
