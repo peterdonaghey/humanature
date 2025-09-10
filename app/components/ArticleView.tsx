@@ -10,6 +10,7 @@ interface ArticleViewProps {
     createdAt: string;
     author?: {
       username: string;
+      name?: string | null;
     } | null;
     project?: {
       id: string;
@@ -112,7 +113,7 @@ export function ArticleView({
             {post.author && (
               <>
                 <span>•</span>
-                <span>by {post.author.username}</span>
+                <span>by {post.author.name || post.author.username}</span>
               </>
             )}
             {post.project && (

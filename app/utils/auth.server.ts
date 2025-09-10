@@ -187,6 +187,17 @@ export function isAdmin(user: {privilages: string[]} | null): boolean {
   return user?.privilages?.includes("admin") || false;
 }
 
+// Require user to be logged in - throws error if not logged in
+export async function requireUser(request: Request) {
+  const user = await getUser(request);
+
+  if (!user) {
+    throw redirect("/login");
+  }
+
+  return user;
+}
+
 // Require admin access - throws error if not admin
 export async function requireAdmin(request: Request) {
   const user = await getUser(request);

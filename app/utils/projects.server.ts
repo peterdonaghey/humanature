@@ -30,7 +30,12 @@ export async function getProject(id: string) {
     include: {
       posts: {
         include: {
-          author: true,
+          author: {
+            select: {
+              username: true,
+              name: true,
+            },
+          },
         },
         orderBy: {createdAt: "desc"},
       },

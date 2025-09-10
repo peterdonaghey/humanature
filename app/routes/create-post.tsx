@@ -29,7 +29,7 @@ export const loader: LoaderFunction = async ({request}) => {
 };
 
 export const action: ActionFunction = async ({request}) => {
-  await requireAdmin(request);
+  const user = await requireAdmin(request);
 
   const formData = await request.formData();
   const title = formData.get("title");
@@ -58,6 +58,7 @@ export const action: ActionFunction = async ({request}) => {
     title,
     content || "",
     projectId,
+    user.id, // Pass the current user's ID as the author
     documentUrl || null
   );
   return redirect(`/post/${post.id}`);

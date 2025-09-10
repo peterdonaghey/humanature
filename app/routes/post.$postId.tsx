@@ -10,7 +10,12 @@ export async function loader({params}: LoaderFunctionArgs) {
     where: {id: params.postId},
     include: {
       project: true,
-      author: true,
+      author: {
+        select: {
+          username: true,
+          name: true,
+        },
+      },
     },
   });
 

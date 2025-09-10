@@ -4,6 +4,7 @@ export async function createPost(
   title: string,
   content: string,
   projectId: string,
+  authorId: string,
   documentUrl?: string | null
 ) {
   return db.post.create({
@@ -16,6 +17,11 @@ export async function createPost(
           id: projectId,
         },
       },
+      author: {
+        connect: {
+          id: authorId,
+        },
+      },
     },
   });
 }
@@ -25,7 +31,12 @@ export async function getPosts() {
     orderBy: {createdAt: "desc"},
     include: {
       project: true,
-      author: true,
+      author: {
+        select: {
+          username: true,
+          name: true,
+        },
+      },
     },
   });
 }

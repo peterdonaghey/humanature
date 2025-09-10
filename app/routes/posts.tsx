@@ -9,7 +9,7 @@ import {convertPdfToHtml} from "~/utils/pdf.server";
 
 type PostWithContent = Post & {
   project?: {id: string; name: string} | null;
-  author?: {username: string} | null;
+  author?: {username: string; name?: string | null} | null;
   htmlContent: string;
 };
 

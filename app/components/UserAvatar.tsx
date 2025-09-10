@@ -1,4 +1,4 @@
-import {Form} from "@remix-run/react";
+import {Form, Link} from "@remix-run/react";
 import {useEffect, useRef, useState} from "react";
 
 type UserAvatarProps = {
@@ -46,14 +46,23 @@ export const UserAvatar = ({username}: UserAvatarProps) => {
               {username}
             </span>
           </div>
-          <Form action="/logout" method="post">
-            <button
-              type="submit"
-              className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+          <div className="py-1">
+            <Link
+              to="/profile"
+              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+              onClick={() => setIsOpen(false)}
             >
-              Logout
-            </button>
-          </Form>
+              Profile
+            </Link>
+            <Form action="/logout" method="post">
+              <button
+                type="submit"
+                className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+              >
+                Logout
+              </button>
+            </Form>
+          </div>
         </div>
       )}
     </div>

@@ -23,7 +23,7 @@ type PostWithContent = {
   documentUrl: string | null;
   createdAt: string;
   project?: {id: string; name: string} | null;
-  author?: {username: string} | null;
+  author?: {username: string; name?: string | null} | null;
   htmlContent: string;
 };
 

@@ -34,7 +34,7 @@ export async function loader({params, request}: LoaderFunctionArgs) {
 }
 
 export async function action({request, params}: ActionFunctionArgs) {
-  await requireAdmin(request);
+  const user = await requireAdmin(request);
 
   const formData = await request.formData();
   const title = formData.get("title");
@@ -67,6 +67,9 @@ export async function action({request, params}: ActionFunctionArgs) {
       documentUrl: documentUrl || null,
       project: {
         connect: {id: projectId},
+      },
+      author: {
+        connect: {id: user.id}, // Assign current user as author when editing
       },
     },
   });
