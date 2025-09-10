@@ -119,6 +119,7 @@ export async function loader({params, request}: LoaderFunctionArgs) {
 
         return {
           ...post,
+          createdAt: post.createdAt.toISOString(),
           htmlContent,
         };
       })
@@ -237,6 +238,49 @@ export default function ProjectDetails() {
             </h1>
             {userIsAdmin && (
               <div className="space-x-4">
+                <div className="relative inline-block">
+                  <input
+                    type="file"
+                    onChange={handleDocumentUpload}
+                    className="hidden"
+                    id="header-document-upload"
+                    disabled={isUploading}
+                  />
+                  <label
+                    htmlFor="header-document-upload"
+                    className={`inline-flex items-center px-4 py-2 border border-gray-300 text-gray-700 hover:bg-gray-50 rounded-lg transition-colors cursor-pointer ${
+                      isUploading ? "opacity-50 cursor-not-allowed" : ""
+                    }`}
+                  >
+                    {isUploading ? (
+                      <span className="flex items-center">
+                        <svg
+                          className="animate-spin -ml-1 mr-2 h-4 w-4 text-gray-700"
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                        >
+                          <circle
+                            className="opacity-25"
+                            cx="12"
+                            cy="12"
+                            r="10"
+                            stroke="currentColor"
+                            strokeWidth="4"
+                          ></circle>
+                          <path
+                            className="opacity-75"
+                            fill="currentColor"
+                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                          ></path>
+                        </svg>
+                        Uploading...
+                      </span>
+                    ) : (
+                      "Upload Document"
+                    )}
+                  </label>
+                </div>
                 <Link
                   to={`/edit-project/${project.id}`}
                   className="inline-flex items-center px-4 py-2 border border-emerald-600 text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors"
@@ -258,65 +302,16 @@ export default function ProjectDetails() {
           </div>
         </div>
 
-        <div className="mb-8 bg-gray-50 rounded-lg p-6">
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-xl font-semibold text-emerald-800">
-              Documents
-            </h2>
-            {userIsAdmin && (
-              <div className="relative">
-                <input
-                  type="file"
-                  onChange={handleDocumentUpload}
-                  className="hidden"
-                  id="document-upload"
-                  disabled={isUploading}
-                />
-                <label
-                  htmlFor="document-upload"
-                  className={`inline-flex items-center px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg transition-colors cursor-pointer ${
-                    isUploading ? "opacity-50 cursor-not-allowed" : ""
-                  }`}
-                >
-                  {isUploading ? (
-                    <span className="flex items-center">
-                      <svg
-                        className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                      >
-                        <circle
-                          className="opacity-25"
-                          cx="12"
-                          cy="12"
-                          r="10"
-                          stroke="currentColor"
-                          strokeWidth="4"
-                        ></circle>
-                        <path
-                          className="opacity-75"
-                          fill="currentColor"
-                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                        ></path>
-                      </svg>
-                      Uploading...
-                    </span>
-                  ) : (
-                    "Upload Document"
-                  )}
-                </label>
-              </div>
-            )}
-          </div>
+        {project.documents && project.documents.length > 0 && (
+          <div className="mb-8 bg-gray-50 rounded-lg p-6">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl font-semibold text-emerald-800">
+                Documents
+              </h2>
+            </div>
 
-          <div className="space-y-2">
-            {!project.documents || project.documents.length === 0 ? (
-              <p className="text-gray-500 text-center py-4">
-                No documents uploaded yet
-              </p>
-            ) : (
-              project.documents.map((document) => (
+            <div className="space-y-2">
+              {project.documents.map((document) => (
                 <div
                   key={document.id}
                   className="flex items-center justify-between bg-white rounded-lg p-4 border border-gray-200"
@@ -389,10 +384,10 @@ export default function ProjectDetails() {
                     )}
                   </div>
                 </div>
-              ))
-            )}
+              ))}
+            </div>
           </div>
-        </div>
+        )}
 
         <div className="space-y-6">
           <div className="flex justify-between items-center">
