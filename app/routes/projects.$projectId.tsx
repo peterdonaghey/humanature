@@ -7,12 +7,25 @@ import {Link, useLoaderData, Form, useNavigation} from "@remix-run/react";
 import {getProject} from "~/utils/projects.server";
 import {deletePost} from "~/utils/posts.server";
 import {Layout} from "../components/Layout";
+import {PostsList} from "../components/PostsList";
 import {useState} from "react";
 import db from "~/utils/db.server";
 import {deleteFromS3} from "~/utils/aws.server";
 import {formatDate} from "~/utils/date";
 import {ProjectBanner} from "~/components/ProjectBanner";
 import {getUser, isAdmin, requireAdmin} from "~/utils/auth.server";
+import {convertPdfToHtml} from "~/utils/pdf.server";
+
+type PostWithContent = {
+  id: string;
+  title: string;
+  content: string | null;
+  documentUrl: string | null;
+  createdAt: string;
+  project?: {id: string; name: string} | null;
+  author?: {username: string} | null;
+  htmlContent: string;
+};
 
 export async function action({request}: ActionFunctionArgs) {
   await requireAdmin(request);
@@ -80,12 +93,41 @@ export async function loader({params, request}: LoaderFunctionArgs) {
 
   try {
     const user = await getUser(request);
-    const project = await getProject(params.projectId);
-    console.log("Project found:", project ? "yes" : "no");
+    const rawProject = await getProject(params.projectId);
+    console.log("Project found:", rawProject ? "yes" : "no");
 
-    if (!project) {
+    if (!rawProject) {
       throw new Response("Project not found", {status: 404});
     }
+
+    // Process posts to include HTML content
+    const postsWithContent: PostWithContent[] = await Promise.all(
+      rawProject.posts.map(async (post) => {
+        let htmlContent = post.content || "";
+
+        // If there's a document URL, convert it to HTML
+        if (post.documentUrl) {
+          try {
+            htmlContent = await convertPdfToHtml(post.documentUrl);
+          } catch (error) {
+            console.error("Error converting document:", error);
+            // Fallback to regular content if document conversion fails
+            htmlContent =
+              post.content || "<p>Unable to load document content.</p>";
+          }
+        }
+
+        return {
+          ...post,
+          htmlContent,
+        };
+      })
+    );
+
+    const project = {
+      ...rawProject,
+      posts: postsWithContent,
+    };
 
     return json({project, isAdmin: isAdmin(user)});
   } catch (error) {
@@ -178,7 +220,7 @@ export default function ProjectDetails() {
 
   return (
     <Layout>
-      <div className="container mx-auto px-4 py-8">
+      <div className="max-w-6xl mx-auto px-4 py-8">
         {project.banner && (
           <ProjectBanner
             banner={project.banner}
@@ -357,109 +399,11 @@ export default function ProjectDetails() {
             <h2 className="text-xl font-semibold text-emerald-800">Posts</h2>
           </div>
 
-          {project.posts.length === 0 ? (
-            <div className="text-center py-12 bg-gray-50 rounded-lg">
-              <p className="text-gray-500 mb-4">No posts created yet</p>
-              {userIsAdmin && (
-                <Link
-                  to="/create-post"
-                  className="inline-flex items-center px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg transition-colors"
-                >
-                  Create First Post
-                </Link>
-              )}
-            </div>
-          ) : (
-            <div className="space-y-4">
-              {project.posts.map((post) => (
-                <div
-                  key={post.id}
-                  className="bg-white rounded-lg shadow-md p-6 border border-emerald-100 hover:shadow-lg transition-shadow group"
-                >
-                  <div className="flex justify-between items-start mb-4">
-                    <Link
-                      to={`/post/${post.id}`}
-                      className="flex-1 group-hover:text-emerald-700 transition-colors"
-                    >
-                      <h3 className="text-xl font-semibold text-emerald-800 mb-2">
-                        {post.title}
-                      </h3>
-                      <div className="text-sm text-gray-500 mb-3">
-                        Created {formatDate(post.createdAt)}
-                      </div>
-
-                      {post.documentUrl && (
-                        <div className="mb-3 flex items-center gap-2 text-sm text-emerald-600">
-                          <span>📄</span>
-                          <span>Document Article</span>
-                        </div>
-                      )}
-
-                      <div className="text-gray-700">
-                        {post.content ? (
-                          <p className="line-clamp-2">
-                            {post.content
-                              .replace(/<[^>]*>/g, "")
-                              .substring(0, 150)}
-                            ...
-                          </p>
-                        ) : post.documentUrl ? (
-                          <p className="text-gray-500 italic">
-                            Document-based article - click to read
-                          </p>
-                        ) : (
-                          <p className="text-gray-500 italic">
-                            No content available
-                          </p>
-                        )}
-                      </div>
-
-                      <div className="mt-3 text-emerald-600 font-medium">
-                        Read full article →
-                      </div>
-                    </Link>
-
-                    {userIsAdmin && (
-                      <div className="flex space-x-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <Link
-                          to={`/edit-post/${post.id}`}
-                          className="text-emerald-600 hover:text-emerald-700 text-sm"
-                        >
-                          Edit
-                        </Link>
-                        <Form method="post" className="inline">
-                          <input
-                            type="hidden"
-                            name="intent"
-                            value="deletePost"
-                          />
-                          <input type="hidden" name="postId" value={post.id} />
-                          <button
-                            type="submit"
-                            className={`text-red-600 hover:text-red-700 text-sm ${
-                              isDeleting ? "opacity-50" : ""
-                            }`}
-                            disabled={isDeleting}
-                            onClick={(e) => {
-                              if (
-                                !confirm(
-                                  "Are you sure you want to delete this post?"
-                                )
-                              ) {
-                                e.preventDefault();
-                              }
-                            }}
-                          >
-                            {isDeleting ? "Deleting..." : "Delete"}
-                          </button>
-                        </Form>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
+          <PostsList
+            posts={project.posts}
+            isAdmin={userIsAdmin}
+            showCreateButton={false}
+          />
         </div>
       </div>
     </Layout>

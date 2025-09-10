@@ -28,7 +28,12 @@ export async function getProject(id: string) {
   return db.project.findUnique({
     where: {id},
     include: {
-      posts: true,
+      posts: {
+        include: {
+          author: true,
+        },
+        orderBy: {createdAt: "desc"},
+      },
       documents: true,
     },
   });

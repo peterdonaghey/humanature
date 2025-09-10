@@ -1,13 +1,20 @@
 import {json, LoaderFunction, ActionFunction} from "@remix-run/node";
-import {useLoaderData, Link, Form, useNavigation} from "@remix-run/react";
+import {useLoaderData, Link} from "@remix-run/react";
 import {Layout} from "../components/Layout";
+import {PostsList} from "../components/PostsList";
 import {getPosts, deletePost} from "~/utils/posts.server";
 import {Post} from "@prisma/client";
 import {getUser, requireAdmin} from "../utils/auth.server";
-import {formatDateShort} from "~/utils/date";
+import {convertPdfToHtml} from "~/utils/pdf.server";
+
+type PostWithContent = Post & {
+  project?: {id: string; name: string} | null;
+  author?: {username: string} | null;
+  htmlContent: string;
+};
 
 type LoaderData = {
-  posts: Post[];
+  posts: PostWithContent[];
   isAdmin: boolean;
 };
 
@@ -32,20 +39,43 @@ export const action: ActionFunction = async ({request}) => {
 export const loader: LoaderFunction = async ({request}) => {
   const user = await getUser(request);
   const isAdmin = user?.privilages.includes("admin");
-  const posts = await getPosts();
+  const rawPosts = await getPosts();
+
+  // Process each post to include HTML content
+  const posts = await Promise.all(
+    rawPosts.map(async (post) => {
+      let htmlContent = post.content || "";
+
+      // If there's a document URL, convert it to HTML
+      if (post.documentUrl) {
+        try {
+          htmlContent = await convertPdfToHtml(post.documentUrl);
+        } catch (error) {
+          console.error("Error converting document:", error);
+          // Fallback to regular content if document conversion fails
+          htmlContent =
+            post.content || "<p>Unable to load document content.</p>";
+        }
+      }
+
+      return {
+        ...post,
+        htmlContent,
+      };
+    })
+  );
+
   return json({posts, isAdmin});
 };
 
 export default function Posts() {
   const {posts, isAdmin} = useLoaderData<LoaderData>();
-  const navigation = useNavigation();
-  const isDeleting = navigation.state === "submitting";
 
   console.log("isAdmin", isAdmin);
 
   return (
     <Layout>
-      <div className="max-w-4xl mx-auto px-4">
+      <div className="max-w-6xl mx-auto px-4">
         <div className="flex flex-col justify-center items-center mb-16">
           <h1 className="text-3xl font-bold mb-8">Posts</h1>
           <Link
@@ -56,96 +86,7 @@ export default function Posts() {
           </Link>
         </div>
 
-        <div className="space-y-8">
-          {posts.length === 0 ? (
-            <p className="text-center text-gray-600">
-              No posts yet. Create your first one!
-            </p>
-          ) : (
-            posts.map((post) => (
-              <div
-                key={post.id}
-                className="w-full mx-auto p-6 bg-stone-50 rounded-lg my-4"
-              >
-                <article className="bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow relative group">
-                  <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
-                    {isAdmin && (
-                      <div className="flex gap-2">
-                        <Link
-                          to={`/edit-post/${post.id}`}
-                          className="text-emerald-600 hover:text-emerald-800 transition-colors"
-                        >
-                          Edit
-                        </Link>
-                        <Form method="post" className="inline">
-                          <input type="hidden" name="postId" value={post.id} />
-                          <button
-                            type="submit"
-                            disabled={isDeleting}
-                            className="text-red-500 hover:text-red-700 transition-colors"
-                            onClick={(e) => {
-                              if (
-                                !confirm(
-                                  "Are you sure you want to delete this post?"
-                                )
-                              ) {
-                                e.preventDefault();
-                              }
-                            }}
-                          >
-                            {isDeleting ? "Deleting..." : "Delete"}
-                          </button>
-                        </Form>
-                      </div>
-                    )}
-                  </div>
-
-                  <Link
-                    to={`/post/${post.id}`}
-                    className="block group-hover:text-emerald-700 transition-colors"
-                  >
-                    <h2 className="text-2xl font-semibold mb-2">
-                      {post.title}
-                    </h2>
-                    <p className="text-gray-600 mb-4">
-                      {formatDateShort(post.createdAt)}
-                    </p>
-
-                    {post.documentUrl && (
-                      <div className="mb-3 flex items-center gap-2 text-sm text-emerald-600">
-                        <span>📄</span>
-                        <span>Document Article</span>
-                      </div>
-                    )}
-
-                    <div className="text-gray-700">
-                      {post.content ? (
-                        <p className="line-clamp-3">
-                          {post.content
-                            .replace(/<[^>]*>/g, "")
-                            .substring(0, 200)}
-                          ...
-                        </p>
-                      ) : post.documentUrl ? (
-                        <p className="text-gray-500 italic">
-                          Click to view document-based article
-                        </p>
-                      ) : (
-                        <p className="text-gray-500 italic">
-                          No content available
-                        </p>
-                      )}
-                    </div>
-
-                    <div className="mt-4 text-emerald-600 font-medium">
-                      Read more →
-                    </div>
-                  </Link>
-                </article>
-              </div>
-            ))
-          )}
-        </div>
+        <PostsList posts={posts} isAdmin={isAdmin} showCreateButton={true} />
       </div>
     </Layout>
   );

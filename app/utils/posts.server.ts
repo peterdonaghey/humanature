@@ -25,6 +25,7 @@ export async function getPosts() {
     orderBy: {createdAt: "desc"},
     include: {
       project: true,
+      author: true,
     },
   });
 }
