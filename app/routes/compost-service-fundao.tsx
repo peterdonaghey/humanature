@@ -173,6 +173,32 @@ export default function CompostServiceFundao() {
     },
   };
 
+  const serviceStatusSection = {
+    ptText: {
+      title: "🌱 Pausa para Respirar",
+      message:
+        "O nosso serviço de compostagem está a fazer uma pequena pausa neste momento. Estamos a reorganizar as coisas para voltar ainda melhor. Vamos dar um toque quando estivermos de volta! 🤙",
+    },
+    enText: {
+      title: "🌱 Taking a Breather",
+      message:
+        "Our composting service is taking a little break right now. We're getting our act together to come back even better. We'll give you a shout when we're back up and running! 🤙",
+    },
+  };
+
+  const locationSection = {
+    ptText: {
+      title: "📍 Onde Estamos?",
+      message:
+        "Por agora, não temos um ponto fixo para deixar os vossos restos orgânicos. Mas assim que voltarmos, vamos gritar bem alto onde nos podem encontrar! 📢",
+    },
+    enText: {
+      title: "📍 Location",
+      message:
+        "At the moment, we do not have an active location for organic material collection. When the service resumes, we will announce the new location here.",
+    },
+  };
+
   const compostLabels = {
     ptText: {
       yes: "SIM",
@@ -218,6 +244,38 @@ export default function CompostServiceFundao() {
               {language === "pt"
                 ? welcomeSection.ptText.paragraph2
                 : welcomeSection.enText.paragraph2}
+            </p>
+          </div>
+        </div>
+
+        {/* Service Status Notice */}
+        <div className="mb-16">
+          <div className="bg-amber-50 border-l-4 border-amber-400 rounded-lg p-6 mb-8">
+            <h2 className="text-xl font-semibold text-amber-800 mb-3">
+              {language === "pt"
+                ? serviceStatusSection.ptText.title
+                : serviceStatusSection.enText.title}
+            </h2>
+            <p className="text-amber-700">
+              {language === "pt"
+                ? serviceStatusSection.ptText.message
+                : serviceStatusSection.enText.message}
+            </p>
+          </div>
+        </div>
+
+        {/* Location Section */}
+        <div className="mb-16">
+          <div className="bg-blue-50 rounded-lg p-6">
+            <h2 className="text-xl font-semibold text-blue-800 mb-3">
+              {language === "pt"
+                ? locationSection.ptText.title
+                : locationSection.enText.title}
+            </h2>
+            <p className="text-blue-700">
+              {language === "pt"
+                ? locationSection.ptText.message
+                : locationSection.enText.message}
             </p>
           </div>
         </div>
