@@ -177,12 +177,12 @@ export default function CompostServiceFundao() {
     ptText: {
       title: "🌱 Pausa para Respirar",
       message:
-        "Hey pessoal! O nosso serviço de compostagem está a fazer uma pequena pausa neste momento. Estamos a reorganizar as coisas para voltar ainda melhor. Vamos dar um toque quando estivermos de volta! 🤙",
+        "O nosso serviço de compostagem está a fazer uma pequena pausa neste momento. Estamos a reorganizar as coisas para voltar ainda melhor. Vamos dar um toque quando estivermos de volta! 🤙",
     },
     enText: {
       title: "🌱 Taking a Breather",
       message:
-        "Hey folks! Our composting service is taking a little break right now. We're getting our act together to come back even better. We'll give you a shout when we're back up and running! 🤙",
+        "Our composting service is taking a little break right now. We're getting our act together to come back even better. We'll give you a shout when we're back up and running! 🤙",
     },
   };
 
