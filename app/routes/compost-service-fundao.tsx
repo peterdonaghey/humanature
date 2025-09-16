@@ -177,12 +177,12 @@ export default function CompostServiceFundao() {
     ptText: {
       title: "🌱 Pausa para Respirar",
       message:
-        "O nosso serviço de compostagem está a fazer uma pequena pausa neste momento. Estamos a reorganizar as coisas para voltar ainda melhor. Vamos dar um toque quando estivermos de volta! 🤙",
+        "Hey pessoal! O nosso serviço de compostagem está a fazer uma pequena pausa neste momento. Estamos a reorganizar as coisas para voltar ainda melhor. Vamos dar um toque quando estivermos de volta! 🤙",
     },
     enText: {
       title: "🌱 Taking a Breather",
       message:
-        "Our composting service is taking a little break right now. We're getting our act together to come back even better. We'll give you a shout when we're back up and running! 🤙",
+        "Hey folks! Our composting service is taking a little break right now. We're getting our act together to come back even better. We'll give you a shout when we're back up and running! 🤙",
     },
   };
 
@@ -193,9 +193,9 @@ export default function CompostServiceFundao() {
         "Por agora, não temos um ponto fixo para deixar os vossos restos orgânicos. Mas assim que voltarmos, vamos gritar bem alto onde nos podem encontrar! 📢",
     },
     enText: {
-      title: "📍 Location",
+      title: "📍 Where Are We?",
       message:
-        "At the moment, we do not have an active location for organic material collection. When the service resumes, we will announce the new location here.",
+        "Right now, we don't have a fixed spot to drop off your organic goodies. But as soon as we're back, we'll shout it from the rooftops where you can find us! 📢",
     },
   };
 
