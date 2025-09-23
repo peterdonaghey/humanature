@@ -272,7 +272,44 @@ export async function loader({request}: LoaderFunctionArgs) {
   }
   
   // Parse configuration - let it throw if corrupted
-  const cardsData = JSON.parse(config.value);
+  let cardsData = JSON.parse(config.value);
+  
+  // Auto-migrate old format to new format if needed
+  if (!cardsData.cards && cardsData.ptText && cardsData.enText) {
+    console.log("🔄 Auto-migrating calendar config to new structure...");
+    
+    const newData = {
+      cards: cardsData.ptText.map((ptCard: any, index: number) => {
+        const enCard = cardsData.enText[index];
+        return {
+          id: ptCard.id,
+          icon: ptCard.icon,
+          title: {
+            pt: ptCard.title,
+            en: enCard.title
+          },
+          color: ptCard.color,
+          textColor: ptCard.textColor,
+          items: ptCard.items.map((ptItem: any, itemIndex: number) => ({
+            icon: ptItem.icon,
+            text: {
+              pt: ptItem.text,
+              en: enCard.items[itemIndex]?.text || ptItem.text
+            }
+          }))
+        };
+      })
+    };
+    
+    // Update database with new format
+    await (db as any).configuration.update({
+      where: { key: "calendar_cards" },
+      data: { value: JSON.stringify(newData) }
+    });
+    
+    cardsData = newData;
+    console.log("✅ Calendar config auto-migrated successfully!");
+  }
   
   return json({
     cardsData,
@@ -375,15 +412,19 @@ export default function Index() {
   };
 
 
-  // Convert new structure to display format based on language
-  const cards = cardsData.cards.map((card: any) => ({
-    ...card,
-    title: card.title[language],
-    items: card.items.map((item: any) => ({
-      ...item,
-      text: item.text[language]
-    }))
-  }));
+  // Convert structure to display format based on language (handle both old and new formats)
+  const cards = cardsData.cards ? 
+    // New format
+    cardsData.cards.map((card: any) => ({
+      ...card,
+      title: card.title[language],
+      items: card.items.map((item: any) => ({
+        ...item,
+        text: item.text[language]
+      }))
+    })) :
+    // Old format fallback
+    (language === "pt" ? cardsData.ptText : cardsData.enText) || [];
 
   const mainTitle = {
     ptText: {
