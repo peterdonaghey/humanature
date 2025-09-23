@@ -312,6 +312,7 @@ export async function action({request}: ActionFunctionArgs) {
 
 export default function Index() {
   const {cardsData, isAdmin} = useLoaderData<typeof loader>();
+  console.log("🎯 Calendar loaded - isAdmin:", isAdmin, "cardsData keys:", Object.keys(cardsData));
   const fetcher = useFetcher();
   const {language} = useLanguage();
   const [, setMousePosition] = useState({x: 0, y: 0});
@@ -354,7 +355,12 @@ export default function Index() {
   const CARD_RADIUS = 260; // Distance from center to cards (in pixels)
 
   const handleContextMenu = (e: React.MouseEvent) => {
-    if (!isAdmin) return;
+    console.log("🧙‍♂️ Right-click detected! isAdmin:", isAdmin);
+    if (!isAdmin) {
+      console.log("❌ No admin privileges - right-click blocked");
+      return;
+    }
+    console.log("✅ Admin access confirmed - opening edit modal");
     e.preventDefault();
     setEditConfig(JSON.stringify(cardsData, null, 2));
     setShowEditModal(true);
