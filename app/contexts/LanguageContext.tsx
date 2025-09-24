@@ -1,4 +1,4 @@
-import {createContext, useContext, useState, ReactNode} from "react";
+import {createContext, useContext, useState, useEffect, ReactNode} from "react";
 
 type LanguageContextType = {
   language: "pt" | "en";
@@ -10,12 +10,16 @@ const LanguageContext = createContext<LanguageContextType | undefined>(
 );
 
 export function LanguageProvider({children}: {children: ReactNode}) {
-  const [language, setLanguageState] = useState<"pt" | "en">(() => {
-    if (typeof window !== "undefined") {
-      return (localStorage.getItem("language") as "pt" | "en") || "pt";
+  // Always start with the same default state on both server and client
+  const [language, setLanguageState] = useState<"pt" | "en">("pt");
+
+  // Read from localStorage after hydration to prevent server/client mismatch
+  useEffect(() => {
+    const storedLanguage = localStorage.getItem("language") as "pt" | "en";
+    if (storedLanguage) {
+      setLanguageState(storedLanguage);
     }
-    return "pt";
-  });
+  }, []);
 
   const setLanguage = (lang: "pt" | "en") => {
     setLanguageState(lang);
