@@ -1,0 +1,253 @@
+{
+  "cards": [
+    {
+      "id": "coming-up",
+      "icon": "🦄",
+      "title": {
+        "pt": "aproximando-se..",
+        "en": "coming up.."
+      },
+      "color": "from-fuchsia-200 via-pink-300 to-purple-300",
+      "textColor": "text-purple-900",
+      "items": [
+        {
+          "icon": "🤸‍♀️",
+          "text": {
+            "pt": "workshop de acroyoga - 30 setembro",
+            "en": "acroyoga workshop - sept 30th"
+          }
+        },
+        {
+          "icon": "🍺",
+          "text": {
+            "pt": "fermentação ginger beer & kombucha",
+            "en": "ginger beer & kombucha brewing"
+          }
+        },
+        {
+          "icon": "🌰",
+          "text": {
+            "pt": "workshop de sementes - outubro",
+            "en": "seed workshop - october"
+          }
+        },
+        {
+          "icon": "🏠",
+          "text": {
+            "pt": "finalizar trabalhos de construção",
+            "en": "finish construction work"
+          }
+        },
+        {
+          "icon": "📜",
+          "text": {
+            "pt": "reunião da associação",
+            "en": "association meeting"
+          }
+        }
+      ]
+    },
+    {
+      "id": "good-stuff",
+      "icon": "🎊",
+      "title": {
+        "pt": "vitórias recentes",
+        "en": "recent wins"
+      },
+      "color": "from-lime-200 via-green-300 to-emerald-400",
+      "textColor": "text-emerald-900",
+      "items": [
+        {
+          "icon": "📅",
+          "text": {
+            "pt": "sessão de planeamento semanal feita",
+            "en": "weekly planning session done"
+          }
+        },
+        {
+          "icon": "🌿",
+          "text": {
+            "pt": "jardim de ervas a prosperar",
+            "en": "herb garden thriving"
+          }
+        },
+        {
+          "icon": "🏗️",
+          "text": {
+            "pt": "progresso nos terraços",
+            "en": "terrace progress ongoing"
+          }
+        },
+        {
+          "icon": "🧰",
+          "text": {
+            "pt": "reorganização dos espaços",
+            "en": "spaces reorganized"
+          }
+        },
+        {
+          "icon": "🐔",
+          "text": {
+            "pt": "chickens roaming free - on the other side of the fence!",
+            "en": "chickens roaming free - on the other side of the fence!"
+          }
+        }
+      ]
+    },
+    {
+      "id": "always-happening",
+      "icon": "🌀",
+      "title": {
+        "pt": "sempre acontecendo",
+        "en": "always happening"
+      },
+      "color": "from-cyan-200 via-blue-300 to-indigo-400",
+      "textColor": "text-indigo-900",
+      "items": [
+        {
+          "icon": "🧪",
+          "text": {
+            "pt": "kombucha & ginger beer",
+            "en": "kombucha & ginger beer"
+          }
+        },
+        {
+          "icon": "🌳",
+          "text": {
+            "pt": "propagação de árvores frutíferas",
+            "en": "fruit tree propagation"
+          }
+        },
+        {
+          "icon": "🗺️",
+          "text": {
+            "pt": "design permacultura dos espaços",
+            "en": "permaculture space design"
+          }
+        },
+        {
+          "icon": "🎭",
+          "text": {
+            "pt": "workshops espontâneos da aldeia",
+            "en": "spontaneous village workshops"
+          }
+        },
+        {
+          "icon": "🏗️",
+          "text": {
+            "pt": "cimentação terraço futura",
+            "en": "futura terrace cementing"
+          }
+        }
+      ]
+    },
+    {
+      "id": "autumn-vibes",
+      "icon": "🍄",
+      "title": {
+        "pt": "intenções outono",
+        "en": "autumn intentions"
+      },
+      "color": "from-orange-200 via-amber-300 to-yellow-400",
+      "textColor": "text-amber-900",
+      "items": [
+        {
+          "icon": "💭",
+          "text": {
+            "pt": "conversas núcleo quinta",
+            "en": "quinta core talks"
+          }
+        },
+        {
+          "icon": "📜",
+          "text": {
+            "pt": "desenvolvimento da associação",
+            "en": "association development"
+          }
+        },
+        {
+          "icon": "🎨",
+          "text": {
+            "pt": "embelezamento do pátio + lagoinha",
+            "en": "courtyard beautification + pond"
+          }
+        },
+        {
+          "icon": "🔥",
+          "text": {
+            "pt": "preparar para o inverno / rocket stove",
+            "en": "prepare for winter / rocket stove"
+          }
+        },
+        {
+          "icon": "🏠",
+          "text": {
+            "pt": "finalizar terraço da futura",
+            "en": "finish futura terrace"
+          }
+        }
+      ]
+    },
+    {
+      "id": "mystery-box",
+      "icon": "🎲",
+      "title": {
+        "pt": "acontecimentos misteriosos",
+        "en": "mystery happenings"
+      },
+      "color": "from-rose-200 via-red-300 to-pink-400",
+      "textColor": "text-red-900",
+      "items": [
+        {
+          "icon": "🦋",
+          "text": {
+            "pt": "Animais aparecedo",
+            "en": "Animals appearing"
+          }
+        },
+        {
+          "icon": "🔮",
+          "text": {
+            "pt": "círculos de visão futura",
+            "en": "future vision circles"
+          }
+        },
+        {
+          "icon": "🎪",
+          "text": {
+            "pt": "eventos comunitários surpresa",
+            "en": "surprise community events"
+          }
+        },
+        {
+          "icon": "✨",
+          "text": {
+            "pt": "magia que simplesmente acontece",
+            "en": "magic that just happens"
+          }
+        },
+        {
+          "icon": "🎵",
+          "text": {
+            "pt": "música inesperada",
+            "en": "unexpected music"
+          }
+        }
+      ]
+    }
+  ],
+  "title": {
+    "desktop": {
+      "pt": "A RODA DOS ACONTECIMENTOS",
+      "en": "THE WHEEL OthAPPENINGS"
+    },
+    "mobile": {
+      "pt": "ACONTECIMENTOS",
+      "en": "HAPPENINGS"
+    },
+    "title": {
+      "pt": "A RODA DOS ACONTECIMENTOS",
+      "en": "THE WHEEL OF HAPPENINGS"
+    }
+  }
+}

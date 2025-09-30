@@ -1,0 +1,225 @@
+{
+  "cards": [
+    {
+      "id": "coming-up",
+      "icon": "🦄",
+      "color": "from-fuchsia-200 via-pink-300 to-purple-300",
+      "textColor": "text-purple-900",
+      "title": {
+        "en": "sprouting soon..",
+        "pt": "brotando em breve.."
+      },
+      "items": [
+        {
+          "icon": "💫",
+          "text": {
+            "en": "ecstatic dance sat 4th - intimate movement medicine",
+            "pt": "dança extática sáb 4 - medicina do movimento íntimo"
+          }
+        },
+        {
+          "icon": "💃",
+          "text": {
+            "en": "dance workshop oct 11 - lindy hop, bachata, jam & vegan feast",
+            "pt": "workshop de dança 11 out - lindy hop, bachata, jam e banquete vegano"
+          }
+        },
+        {
+          "icon": "🏗️",
+          "text": {
+            "en": "terrace cementing sessions - creating foundations together",
+            "pt": "sessões de cimentação do terraço - criando fundações juntos"
+          }
+        },
+        {
+          "icon": "🗣️",
+          "text": {
+            "en": "quinta core conversations - diving deep",
+            "pt": "conversas centrais da quinta - mergulhando fundo"
+          }
+        }
+      ]
+    },
+    {
+      "id": "always-brewing",
+      "icon": "🌀",
+      "color": "from-cyan-200 via-blue-300 to-indigo-400",
+      "textColor": "text-indigo-900",
+      "title": {
+        "en": "always brewing",
+        "pt": "sempre fermentando"
+      },
+      "items": [
+        {
+          "icon": "🧪",
+          "text": {
+            "en": "winter fermentária - tempeh, tofu & golden ginger beer",
+            "pt": "fermentária de inverno - tempeh, tofu e cerveja dourada de gengibre"
+          }
+        },
+        {
+          "icon": "🌳",
+          "text": {
+            "en": "fruit tree propagation & seedling adventures",
+            "pt": "propagação de árvores frutíferas & aventuras de mudas"
+          }
+        },
+        {
+          "icon": "🗺️",
+          "text": {
+            "en": "permaculture space design",
+            "pt": "design permacultura dos espaços"
+          }
+        },
+        {
+          "icon": "🫒",
+          "text": {
+            "en": "olive harvest wanderings - gathering from village lands",
+            "pt": "colheita de azeitonas - recolhendo das terras da aldeia"
+          }
+        }
+      ]
+    },
+    {
+      "id": "earth-shaping",
+      "icon": "🔨",
+      "color": "from-orange-200 via-amber-300 to-yellow-400",
+      "textColor": "text-amber-900",
+      "title": {
+        "en": "earth shaping",
+        "pt": "moldando a terra"
+      },
+      "items": [
+        {
+          "icon": "🪟",
+          "text": {
+            "en": "window building - sealing spaces for winter winds",
+            "pt": "construção de janelas - vedando espaços para os ventos de inverno"
+          }
+        },
+        {
+          "icon": "🏡",
+          "text": {
+            "en": "clay plastering at sweetland - hands in earth medicine",
+            "pt": "reboco de barro em sweetland - mãos na medicina da terra"
+          }
+        },
+        {
+          "icon": "🌱",
+          "text": {
+            "en": "garden fence reinforcing - protecting from the chickens!",
+            "pt": "reforço da cerca do jardim - protegendo das galinhas!"
+          }
+        },
+        {
+          "icon": "💰",
+          "text": {
+            "en": "funding applications - manifesting resources for vision",
+            "pt": "candidaturas a financiamento - manifestando recursos para a visão"
+          }
+        }
+      ]
+    },
+    {
+      "id": "sacred-rhythms",
+      "icon": "🌊",
+      "color": "from-lime-200 via-green-300 to-emerald-400",
+      "textColor": "text-emerald-900",
+      "title": {
+        "en": "sacred rhythms",
+        "pt": "ritmos sagrados"
+      },
+      "items": [
+        {
+          "icon": "🌈",
+          "text": {
+            "en": "peter away on rainbow journey oct 6-20 - returning with magic",
+            "pt": "o peter está fora em jornada arco-íris 6-20 out - retornando com magia"
+          }
+        },
+        {
+          "icon": "🎵",
+          "text": {
+            "en": "sunday jam sessions - musical flow in our space",
+            "pt": "sessões de jam domingo - fluxo musical no nosso espaço"
+          }
+        },
+        {
+          "icon": "🧘",
+          "text": {
+            "en": "acroyoga gatherings - mats & connection under sky",
+            "pt": "encontros de acroyoga - tapetes e conexão sob o céu"
+          }
+        },
+        {
+          "icon": "🎭",
+          "text": {
+            "en": "spontaneous village workshops",
+            "pt": "workshops espontâneos da aldeia"
+          }
+        }
+      ]
+    },
+    {
+      "id": "mystery-happenings",
+      "icon": "🎲",
+      "color": "from-rose-200 via-red-300 to-pink-400",
+      "textColor": "text-red-900",
+      "title": {
+        "en": "mystery happenings",
+        "pt": "acontecimentos misteriosos"
+      },
+      "items": [
+        {
+          "icon": "🦋",
+          "text": {
+            "en": "animals appearing in perfect moments",
+            "pt": "animais aparecendo em momentos perfeitos"
+          }
+        },
+        {
+          "icon": "🔮",
+          "text": {
+            "en": "future vision circles emerging",
+            "pt": "círculos de visão futura emergindo"
+          }
+        },
+        {
+          "icon": "🎪",
+          "text": {
+            "en": "surprise community celebrations",
+            "pt": "celebrações comunitárias surpresa"
+          }
+        },
+        {
+          "icon": "✨",
+          "text": {
+            "en": "magic that just happens",
+            "pt": "magia que simplesmente acontece"
+          }
+        },
+        {
+          "icon": "🎵",
+          "text": {
+            "en": "unexpected music flowing through",
+            "pt": "música inesperada fluindo"
+          }
+        }
+      ]
+    }
+  ],
+  "title": {
+    "desktop": {
+      "pt": "A RODA DOS ACONTECIMENTOS",
+      "en": "THE WHEEL OthAPPENINGS"
+    },
+    "mobile": {
+      "pt": "ACONTECIMENTOS",
+      "en": "HAPPENINGS"
+    },
+    "title": {
+      "pt": "A RODA DOS ACONTECIMENTOS",
+      "en": "THE WHEEL OF HAPPENINGS"
+    }
+  }
+}
